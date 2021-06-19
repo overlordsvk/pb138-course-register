@@ -1,7 +1,7 @@
 import React from 'react';
 // import { DataGrid } from '@material-ui/data-grid';
 import './main.css';
-import { AvailiableSubject, IAvailiableSubject } from './listOfSubjects/AvailiableSubject';
+import { SubjectTableHeader, AvailiableSubject, IAvailiableSubject } from './listOfSubjects/AvailiableSubject';
 
 const subjects :IAvailiableSubject[] = [
   {
@@ -33,15 +33,12 @@ export const TopMenu = () => (
     <div className="row-headder">
       <h1 className="blue">Name Placeholder</h1>
     </div>
-    <div className="a">
-      <div className="d">
-
-        {subjects.map((subject) => AvailiableSubject(subject))}
-      </div>
-      {/* </DataGrid> */}
+    <div className="d">
+      {SubjectTableHeader()}
+      {subjects.map((subject) => AvailiableSubject(subject))}
     </div>
-
   </div>
+
 );
 
 export default TopMenu;
