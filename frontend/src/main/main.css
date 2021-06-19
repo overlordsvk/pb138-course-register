@@ -1,8 +1,6 @@
 :root {
   --blue: blue;
-  --cornflowerblue: rgba(39, 58, 150, 0.6);
-  --silver-gradient: linear-gradient(0deg, rgba(229, 229, 229, 0.2), rgba(229, 229, 229, 0.2)), var(--whisper); /* shamelessly stole this from figma */
-  /* --cornflowerblue: rgba(192, 192, 192, 0.2,); */
+  --endeavour: rgba(39, 58, 150, 0.6);
 }
 
 .blue {
@@ -39,6 +37,7 @@
 
   /* flex-direction: row; */
   height: 4rem;
+  font-weight: bold;
 }
 
 .row-headder > * {
@@ -54,6 +53,7 @@
 
 .mySubjects {
   grid-area: MySubjects;
+  color: blue;
   white-space: nowrap;
   border-bottom: solid 2px blue;
 }
@@ -80,7 +80,8 @@ height: 1rem; */
 
 .ISName {
   grid-area: Name;
-  width: 20rem;
+
+  /* width: 20rem; */
 }
 
 .current-panel {
@@ -88,9 +89,9 @@ height: 1rem; */
   flex-direction: row;
   width: 100%;
   height: 5rem;
-
-  /* background-color: var(--silver); */
-  background-color: var(--cornflowerblue);
+  background-color: var(--endeavour);
+  border-top: solid 1px blue;
+  border-bottom: solid 1px blue;
 }
 
 .current-panel > * {
