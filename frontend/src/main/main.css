@@ -1,5 +1,14 @@
+:root {
+  --blue: blue;
+  --cornflowerblue: rgba(39, 58, 150, 0.6);
+  --silver-gradient: linear-gradient(0deg, rgba(229, 229, 229, 0.2), rgba(229, 229, 229, 0.2)), var(--whisper); /* shamelessly stole this from figma */
+  /* --cornflowerblue: rgba(192, 192, 192, 0.2,); */
+}
+
 .blue {
   color: blue;
+  font-weight: bold;
+  font-size: 2rem;
 
   /* padding: 5rem 5rem; */
 
@@ -10,14 +19,11 @@
   height: 100vh;
 }
 
-.d {
+.table-of-subjects {
   width: 100%;
-  height: 100%;
+  height: auto;
+  border: 2px;
 }
-
-/* .a {
-  height: 70%;
-} */
 
 .row-headder {
   display: grid;
@@ -32,39 +38,87 @@
   grid-template-columns: 20% 20% 20% 20% 20%;
 
   /* flex-direction: row; */
-  height: 5rem;
+  height: 4rem;
+}
+
+.row-headder > * {
+  /* padding: 1rem; */
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0 0 0;
+}
+
+.row-headder > * > span {
+  margin: auto 0 auto 1rem;
 }
 
 .mySubjects {
-  display: flex;
-  flex-direction: row;
-  margin: auto 0;
-  white-space: nowrap;
   grid-area: MySubjects;
-  /* width: 100%; */
-  /* height: 100%; */
-
-  /* color: blue; */
+  white-space: nowrap;
+  border-bottom: solid 2px blue;
 }
 
 .nav-image {
-  height: 2rem;
   width: 2rem;
+  height: 2rem;
+  margin: auto 0 auto 1rem;
 }
 
 .listOfSubjects {
   grid-area: SubjectList;
-  width: 1rem;
-  height: 1rem;
+
+  /* width: 1rem;
+height: 1rem; */
 }
 
 .myStudents {
   grid-area: MyStudents;
-  width: 1rem;
-  height: 1rem;
+
+  /* width: 1rem;
+height: 1rem; */
 }
 
 .ISName {
   grid-area: Name;
   width: 20rem;
+}
+
+.current-panel {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 5rem;
+
+  /* background-color: var(--silver); */
+  background-color: var(--cornflowerblue);
+}
+
+.current-panel > * {
+  margin: auto 1rem;
+}
+
+.current-panel__image {
+  width: 2rem;
+  height: 2rem;
+
+  /* margin: auto 1 auto 2rem; */
+}
+
+.current-panel > span {
+  margin: auto 0 auto 1rem;
+}
+
+.current-panel__amount {
+  display: flex;
+  flex-direction: row;
+  width: 3rem;
+  height: 2rem;
+
+  /* padding: auto; */
+  border: solid 1px black;
+  border-radius: 40%;
+}
+
+.current-panel__amount > * {
+  margin: auto;
 }

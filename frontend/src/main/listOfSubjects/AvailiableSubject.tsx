@@ -6,8 +6,22 @@ export interface IAvailiableSubject {
   code: string,
   name: string,
   details: string,
+  credits: number,
   capacity: number,
 }
+
+export interface IAmountOfSubjects{
+  amount: number;
+}
+
+export const AmountOfSubjects: React.FC<IAmountOfSubjects> = (props) => {
+  const { amount } = props;
+  return (
+    <div className="current-panel__amount">
+      <span>{ amount }</span>
+    </div>
+  );
+};
 
 export const SubjectTableHeader = () => (
   <div className="subject-details">
@@ -16,6 +30,9 @@ export const SubjectTableHeader = () => (
     </div>
     <div className="subject-details__name">
       <span> Name </span>
+    </div>
+    <div className="subject-details__credits">
+      <span> credits </span>
     </div>
     <div className="subject-details__cappacity">
       <span> Capacity </span>
@@ -26,7 +43,7 @@ export const SubjectTableHeader = () => (
 export const AvailiableSubject: React.FC<IAvailiableSubject> = (props) => {
   const currentlyRegistered = 0; // change this to hasura count registered
   const {
-    code, name, capacity,
+    code, name, capacity, credits,
   } = props;
   return (
     <div className="subject-details">
@@ -36,7 +53,10 @@ export const AvailiableSubject: React.FC<IAvailiableSubject> = (props) => {
       <div className="subject-details__name">
         <span>{ name }</span>
       </div>
-      <div className="subject-details__cappacity">
+      <div className="subject-details__credits">
+        <span>{ credits }</span>
+      </div>
+      <div className="subject-details__capacity">
         <span>{ `${currentlyRegistered} / ${capacity}` }</span>
       </div>
     </div>

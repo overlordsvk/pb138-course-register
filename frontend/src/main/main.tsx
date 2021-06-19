@@ -1,19 +1,25 @@
 import React from 'react';
 // import { DataGrid } from '@material-ui/data-grid';
 import './main.css';
-import { SubjectTableHeader, AvailiableSubject, IAvailiableSubject } from './listOfSubjects/AvailiableSubject';
+import {
+  SubjectTableHeader, AvailiableSubject, IAvailiableSubject, AmountOfSubjects, IAmountOfSubjects,
+} from './listOfSubjects/AvailiableSubject';
 import book from '../icons/book-solid.svg';
 import myStudents from '../icons/user-graduate-solid.svg';
 import mySubjects from '../icons/book-reader-solid.svg';
 
 const subjects :IAvailiableSubject[] = [
   {
-    id: 1, code: 'pb138', name: 'Moderni znackovaci jazyky a jejich aplikace', details: 'learn xml, xslt, xquery, html, css, react, and use of APIs', capacity: 50,
+    id: 1, code: 'pb138', name: 'Moderni znackovaci jazyky a jejich aplikace', credits: 5, details: 'learn xml, xslt, xquery, html, css, react, and use of APIs', capacity: 50,
   },
   {
-    id: 2, code: 'pv131', name: 'spracovanie digitalneho obrazu', details: 'learn how to process image in matlab', capacity: 50,
+    id: 2, code: 'pv131', name: 'spracovanie digitalneho obrazu', credits: 4, details: 'learn how to process image in matlab', capacity: 50,
   },
 ];
+
+const Amount: IAmountOfSubjects = {
+  amount: subjects.length,
+};
 
 // const columns = [
 //   { field: 'id', headerName: 'ID', width: 100 },
@@ -35,7 +41,7 @@ export const TopMenu = () => (
   <div className="main">
     <div className="row-headder">
       <div className="ISName">
-        <h1 className="blue">Placeholder</h1>
+        <span className="blue">Placeholder</span>
       </div>
       <div className="mySubjects">
         <div className="nav-image">
@@ -44,13 +50,28 @@ export const TopMenu = () => (
         <span>my Subjects</span>
       </div>
       <div className="listOfSubjects">
-        <img src={book} alt="list of subjects" />
+        <div className="nav-image">
+          <img src={book} alt="list of subjects" />
+        </div>
+        <span>list of subjects</span>
       </div>
       <div className="myStudents">
-        <img src={myStudents} alt="my students" />
+        <div className="nav-image">
+          <img src={myStudents} alt="my students" />
+        </div>
+        <span>my students</span>
       </div>
     </div>
-    <div className="d">
+
+    <div className="current-panel">
+      <div className="current-panel__image">
+        <img src={mySubjects} alt="my subjects" />
+      </div>
+      <span>My Subjects</span>
+      {AmountOfSubjects(Amount)}
+    </div>
+
+    <div className="table-of-subjects">
       {SubjectTableHeader()}
       {subjects.map((subject) => AvailiableSubject(subject))}
     </div>
