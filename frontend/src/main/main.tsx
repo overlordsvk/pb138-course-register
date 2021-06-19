@@ -2,6 +2,9 @@ import React from 'react';
 // import { DataGrid } from '@material-ui/data-grid';
 import './main.css';
 import { SubjectTableHeader, AvailiableSubject, IAvailiableSubject } from './listOfSubjects/AvailiableSubject';
+import book from '../icons/book-solid.svg';
+import myStudents from '../icons/user-graduate-solid.svg';
+import mySubjects from '../icons/book-reader-solid.svg';
 
 const subjects :IAvailiableSubject[] = [
   {
@@ -31,7 +34,21 @@ const subjects :IAvailiableSubject[] = [
 export const TopMenu = () => (
   <div className="main">
     <div className="row-headder">
-      <h1 className="blue">Name Placeholder</h1>
+      <div className="ISName">
+        <h1 className="blue">Placeholder</h1>
+      </div>
+      <div className="mySubjects">
+        <div className="nav-image">
+          <img src={mySubjects} alt="my subjects" />
+        </div>
+        <span>my Subjects</span>
+      </div>
+      <div className="listOfSubjects">
+        <img src={book} alt="list of subjects" />
+      </div>
+      <div className="myStudents">
+        <img src={myStudents} alt="my students" />
+      </div>
     </div>
     <div className="d">
       {SubjectTableHeader()}

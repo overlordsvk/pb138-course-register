@@ -6,8 +6,12 @@
 
 .subject-details > * {
   display: flex;
-  margin: 0 1rem;
+  margin: 0 0 0 1rem;
   white-space: nowrap;
+}
+
+.subject-details__code {
+  width: 3rem;
 }
 
 .subject-details__name {
