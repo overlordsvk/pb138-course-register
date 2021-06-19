@@ -1,0 +1,43 @@
+.subject-details {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  margin: 0 1rem;
+  padding: 0.5rem 0;
+  border-bottom: ridge 1px blue;
+}
+
+.subject-details:last-child {
+  border-bottom: 0;
+}
+
+.subject-details > * {
+  display: flex;
+  width: 4rem;
+  margin: 0 0 0 1rem;
+  white-space: nowrap;
+}
+
+.subject-details__code {
+  width: 3rem;
+  margin: 0;
+}
+
+.subject-details__name {
+  width: auto;
+  margin: auto auto auto 2rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.subject-details__credits {
+  display: flex;
+}
+
+.subject-details__credits > * {
+  margin: auto;
+}
+
+.subject-details__capacity > * {
+  margin: auto;
+}
