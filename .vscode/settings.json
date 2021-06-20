@@ -1,0 +1,17 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "eslint.workingDirectories": [
+		"frontend",
+	],
+    "[typescriptreact]": {
+        "editor.formatOnSave": false,
+    },
+    "[typescript]": {
+        "editor.formatOnSave": false,
+    },
+    "[css]": {
+        "editor.formatOnSave": false,
+    },
+}
