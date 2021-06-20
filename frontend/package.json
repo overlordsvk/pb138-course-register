@@ -28,7 +28,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "stylefix": "stylelint \"**/*.css\" --fix"
+    "stylefix": "stylelint \"**/*.css\" --fix",
+    "linter": "eslint . --ext \".tsx\" --fix"
+
   },
   "eslintConfig": {
     "extends": [

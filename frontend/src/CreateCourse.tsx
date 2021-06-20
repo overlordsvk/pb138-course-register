@@ -1,4 +1,6 @@
-import { Form, Input, Button,  DatePicker, Cascader, InputNumber } from "antd";
+import {
+    Form, Input, Button, DatePicker, Cascader, InputNumber 
+} from "antd";
 import React from "react";
 import "./CreateCourse.css";
 import * as moment from "moment";
@@ -13,12 +15,12 @@ const layout = {
     wrapperCol: { span: 8 },
 };
 
-function pickRange(dates: RangeValue<moment.Moment>, dateStrings: [string, string]){
+function pickRange(dates: RangeValue<moment.Moment>, dateStrings: [string, string]) {
     console.log(dates);
     console.log(dateStrings);
 }
 
-const cascaderOptions=[
+const cascaderOptions = [
     {
         value: "2020",
         label: "2020",
@@ -49,8 +51,6 @@ const cascaderOptions=[
     },
 ];
 
-
-  
 function CreateCourse() {
     const onFinish = (values: any) => {
         console.log("Success:", values);
@@ -64,7 +64,7 @@ function CreateCourse() {
                 <Input placeholder="Course name" />
             </Form.Item>
             <Form.Item label="Detail">
-                <TextArea rows={4} placeholder="Detail"/>
+                <TextArea rows={4} placeholder="Detail" />
             </Form.Item>
             <Form.Item label="Semester">
                 <Cascader
@@ -72,18 +72,17 @@ function CreateCourse() {
                 />
             </Form.Item>
             <Form.Item label="Capacity">
-                <InputNumber  placeholder="Capacity"/>
+                <InputNumber placeholder="Capacity" />
             </Form.Item>
             <Form.Item label="Registration availability time">
-                <RangePicker onChange={pickRange} showTime/>
+                <RangePicker onChange={pickRange} showTime />
             </Form.Item>
             <Form.Item label="Confirm">
                 <Button htmlType="submit" type="primary">Create</Button>
             </Form.Item>
-    
+
         </Form>
     );
 }
 
 export default CreateCourse;
-

@@ -1,4 +1,6 @@
-import { Breadcrumb, Button, Layout,  Table } from "antd";
+import {
+    Breadcrumb, Button, Layout, Table,
+} from "antd";
 import React from "react";
 import {
     BrowserRouter as Router, Switch, Route, Link,
@@ -7,8 +9,8 @@ import {
 import "./App.css";
 import MainMenu from "./MainMenu";
 import CreateCourse from "./CreateCourse";
-const { Header, Content, Footer } = Layout;
 
+const { Header, Content, Footer } = Layout;
 
 function Home() {
     return <h2>Home</h2>;
@@ -33,7 +35,7 @@ function MyCourses() {
             address: "10 Downing Street",
         },
     ];
-      
+
     const columns = [
         {
             title: "Name",
@@ -51,11 +53,13 @@ function MyCourses() {
             key: "address",
         },
     ];
-      
-    return <>
-        <h1>My Courses</h1>
-        <Table dataSource={dataSource} columns={columns} />
-    </>; 
+
+    return (
+        <>
+            <h1>My Courses</h1>
+            <Table dataSource={dataSource} columns={columns} />
+        </>
+    );
 }
 function Courses() {
     const dataSource = [
@@ -66,7 +70,7 @@ function Courses() {
             address: "10 Downing Street",
         },
     ];
-      
+
     const columns = [
         {
             title: "Name",
@@ -84,16 +88,18 @@ function Courses() {
             key: "address",
         },
     ];
-      
-    return <>
-        <h1> Courses</h1>
-        <Link to="/createcourse">
-            <Button>
-                Create new
-            </Button>
-        </Link>
-        <Table dataSource={dataSource} columns={columns} />
-    </>;
+
+    return (
+        <>
+            <h1> Courses</h1>
+            <Link to="/createcourse">
+                <Button>
+                    Create new
+                </Button>
+            </Link>
+            <Table dataSource={dataSource} columns={columns} />
+        </>
+    );
 }
 
 function Users() {
@@ -112,8 +118,7 @@ export default function App() {
                             </Link>
                         </h1>
                     </div>
-                    <MainMenu/>
-
+                    <MainMenu />
 
                 </Header>
                 <Content style={{ padding: "0 50px" }}>
@@ -150,9 +155,3 @@ export default function App() {
         </Router>
     );
 }
-
-
-
-
-
-
