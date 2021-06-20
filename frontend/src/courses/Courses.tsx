@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Table } from "antd";
 
-
 // const query = query MyQuery {
 //     course {
 //       capacity
@@ -16,43 +15,41 @@ import { Button, Table } from "antd";
 //     }
 //   }
 
-
 export function Courses() {
     const data = {
-        "data": {
-            "course": [
+        data: {
+            course: [
                 {
-                    "capacity": 100,
-                    "detail": "Simple introduction to algorithms for dummies",
-                    "name": "IB102",
-                    "enrolments_aggregate": {
-                        "aggregate": {
-                            "count": 2
-                        }
-                    }
+                    capacity: 100,
+                    detail: "Simple introduction to algorithms for dummies",
+                    name: "IB102",
+                    enrolments_aggregate: {
+                        aggregate: {
+                            count: 2,
+                        },
+                    },
                 },
                 {
-                    "capacity": 20,
-                    "detail": "Martin teaching C# basics.",
-                    "name": "PV178",
-                    "enrolments_aggregate": {
-                        "aggregate": {
-                            "count": 1
-                        }
-                    }
-                }
-            ]
-        }
+                    capacity: 20,
+                    detail: "Martin teaching C# basics.",
+                    name: "PV178",
+                    enrolments_aggregate: {
+                        aggregate: {
+                            count: 1,
+                        },
+                    },
+                },
+            ],
+        },
     };
 
     const courses = data.data.course.map((course) => {
         return {
-            "name": course.name,
-            "detail": course.detail,
-            "capacity": `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
+            name: course.name,
+            detail: course.detail,
+            capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
         };
-    }
-    );
+    });
 
     const columns = [
         {
@@ -72,23 +69,19 @@ export function Courses() {
         },
     ];
 
-    return <>
-        <h1> Courses</h1>
-        <Link to="/createcourse">
-            <Button>
-                Create new
-            </Button>
-        </Link>
-        <Link to="/editcourse">
-            <Button>
-                Edit
-            </Button>
-        </Link>
-        <Link to="/detail">
-            <Button>
-                Detail
-            </Button>
-        </Link>
-        <Table dataSource={courses} columns={columns} />
-    </>;
+    return (
+        <>
+            <h1> Courses</h1>
+            <Link to="/course/new">
+                <Button>Create new</Button>
+            </Link>
+            <Link to="/course/1/edit">
+                <Button>Edit</Button>
+            </Link>
+            <Link to="/course/1">
+                <Button>Detail</Button>
+            </Link>
+            <Table dataSource={courses} columns={columns} />
+        </>
+    );
 }
