@@ -8,19 +8,22 @@ import App from "./App";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { audienceUrl, authClientId, authDomain } from "./utils/constants";
 import { ApolloProviderWithAuth0 } from "./auth/ApolloProvider";
+import { RecoilRoot } from "recoil";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Auth0Provider
-            domain={authDomain}
-            clientId={authClientId}
-            redirectUri={window.location.origin}
-            audience={audienceUrl}
-            scope="read:current_user update:current_user_metadata">
-            <ApolloProviderWithAuth0>
-                <App />
-            </ApolloProviderWithAuth0>
-        </Auth0Provider>
+        <RecoilRoot>
+            <Auth0Provider
+                domain={authDomain}
+                clientId={authClientId}
+                redirectUri={window.location.origin}
+                audience={audienceUrl}
+                scope="read:current_user update:current_user_metadata">
+                <ApolloProviderWithAuth0>
+                    <App />
+                </ApolloProviderWithAuth0>
+            </Auth0Provider>
+        </RecoilRoot>
     </React.StrictMode>,
     document.getElementById("root"), 
 );
