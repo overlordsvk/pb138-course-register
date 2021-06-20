@@ -6,10 +6,10 @@
 		"frontend",
 	],
     "[typescriptreact]": {
-        "editor.formatOnSave": false,
+        "editor.formatOnSave": true,
     },
     "[typescript]": {
-        "editor.formatOnSave": false,
+        "editor.formatOnSave": true,
     },
     "[css]": {
         "editor.formatOnSave": false,

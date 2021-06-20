@@ -8,3 +8,9 @@
         width: 60%;
     }
 }
+
+@media (min-width: 1000px) {
+    .detail-skeleton {
+        width: 50%;
+    }
+}
