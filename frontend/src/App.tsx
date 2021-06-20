@@ -1,5 +1,5 @@
 import {
-    Breadcrumb, Button, Layout, Table,
+    Breadcrumb, Layout, Table,
 } from "antd";
 import React from "react";
 import {
@@ -12,6 +12,9 @@ import CreateCourse from "./CreateCourse";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "./common/Profile";
 import TestCourses from "./common/TestCourses";
+import EditCourse from "./EditCourse";
+import { Courses } from "./courses/Courses";
+import CourseDetail from "./CourseDetail";
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,21 +27,39 @@ function About() {
 }
 
 function MyCourses() {
-    const dataSource = [
-        {
-            key: "1",
-            name: "Mike",
-            age: 32,
-            address: "10 Downing Street",
-        },
-        {
-            key: "2",
-            name: "John",
-            age: 42,
-            address: "10 Downing Street",
-        },
-    ];
 
+    // query MyQuery {
+    //     enrolment(where: {user_id: {_eq: 2}}) {
+    //       course {
+    //         name
+    //         detail
+    //       }
+    //     }
+    //   }
+      
+    const data = {
+        "data": {
+            "enrolment": [
+                {
+                    "course": {
+                        "name": "IB102",
+                        "detail": "Simple introduction to algorithms for dummies"
+                    }
+                },
+                {
+                    "course": {
+                        "name": "PV178",
+                        "detail": "Martin teaching C# basics."
+                    }
+                }
+            ]
+        }
+    };
+
+    const dataSource = data.data.enrolment.map((course) => {return {
+        "name" : course.course.name,
+        "detail": course.course.detail,
+    };});
     const columns = [
         {
             title: "Name",
@@ -46,60 +67,15 @@ function MyCourses() {
             key: "name",
         },
         {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
-        },
-        {
-            title: "Address",
-            dataIndex: "address",
-            key: "address",
+            title: "detail",
+            dataIndex: "detail",
+            key: "detail",
         },
     ];
 
     return (
         <>
             <h1>My Courses</h1>
-            <Table dataSource={dataSource} columns={columns} />
-        </>
-    );
-}
-function Courses() {
-    const dataSource = [
-        {
-            key: "1",
-            name: "Mike",
-            age: 32,
-            address: "10 Downing Street",
-        },
-    ];
-
-    const columns = [
-        {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
-        },
-        {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
-        },
-        {
-            title: "Address",
-            dataIndex: "address",
-            key: "address",
-        },
-    ];
-
-    return (
-        <>
-            <h1> Courses</h1>
-            <Link to="/createcourse">
-                <Button>
-                    Create new
-                </Button>
-            </Link>
             <Table dataSource={dataSource} columns={columns} />
         </>
     );
@@ -126,8 +102,8 @@ export default function App() {
                     <MainMenu />
 
                 </Header>
-                <Content style={{ padding: "0 50px" }}>
-                    <Breadcrumb style={{ margin: "16px 0" }}>
+                <Content className="content">
+                    <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                         <Breadcrumb.Item>List</Breadcrumb.Item>
                         <Breadcrumb.Item>App</Breadcrumb.Item>
@@ -152,13 +128,19 @@ export default function App() {
                             <Route path="/createcourse">
                                 <CreateCourse />
                             </Route>
+                            <Route path="/editcourse">
+                                <EditCourse />
+                            </Route>
+                            <Route path="/detail">
+                                <CourseDetail />
+                            </Route>
                             <Route path="/">
                                 <Home />
                             </Route>
                         </Switch>
                     </div>
                 </Content>
-                <Footer style={{ textAlign: "center" }}>pb138 ©2021</Footer>
+                <Footer className="footer">pb138 ©2021</Footer>
             </Layout>
         </Router>
     );

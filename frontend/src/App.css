@@ -61,3 +61,15 @@
 .logo-text {
     color: #fff;
 }
+
+.content {
+    margin: 0 3em;
+}
+
+.breadcrumb {
+    margin: 1em 0;
+}
+
+.footer {
+    text-align: center;
+}
