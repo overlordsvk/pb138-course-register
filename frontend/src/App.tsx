@@ -1,5 +1,5 @@
 import {
-    Breadcrumb, Button, Layout, Table,
+    Breadcrumb, Layout, Table,
 } from "antd";
 import React from "react";
 import {
@@ -9,6 +9,7 @@ import {
 import "./App.css";
 import MainMenu from "./MainMenu";
 import CreateCourse from "./CreateCourse";
+import { Courses } from "./courses/Courses";
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,21 +22,39 @@ function About() {
 }
 
 function MyCourses() {
-    const dataSource = [
-        {
-            key: "1",
-            name: "Mike",
-            age: 32,
-            address: "10 Downing Street",
-        },
-        {
-            key: "2",
-            name: "John",
-            age: 42,
-            address: "10 Downing Street",
-        },
-    ];
 
+    // query MyQuery {
+    //     enrolment(where: {user_id: {_eq: 2}}) {
+    //       course {
+    //         name
+    //         detail
+    //       }
+    //     }
+    //   }
+      
+    const data = {
+        "data": {
+            "enrolment": [
+                {
+                    "course": {
+                        "name": "IB102",
+                        "detail": "Simple introduction to algorithms for dummies"
+                    }
+                },
+                {
+                    "course": {
+                        "name": "PV178",
+                        "detail": "Martin teaching C# basics."
+                    }
+                }
+            ]
+        }
+    };
+
+    const dataSource = data.data.enrolment.map((course) => {return {
+        "name" : course.course.name,
+        "detail": course.course.detail,
+    };});
     const columns = [
         {
             title: "Name",
@@ -43,60 +62,15 @@ function MyCourses() {
             key: "name",
         },
         {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
-        },
-        {
-            title: "Address",
-            dataIndex: "address",
-            key: "address",
+            title: "detail",
+            dataIndex: "detail",
+            key: "detail",
         },
     ];
 
     return (
         <>
             <h1>My Courses</h1>
-            <Table dataSource={dataSource} columns={columns} />
-        </>
-    );
-}
-function Courses() {
-    const dataSource = [
-        {
-            key: "1",
-            name: "Mike",
-            age: 32,
-            address: "10 Downing Street",
-        },
-    ];
-
-    const columns = [
-        {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
-        },
-        {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
-        },
-        {
-            title: "Address",
-            dataIndex: "address",
-            key: "address",
-        },
-    ];
-
-    return (
-        <>
-            <h1> Courses</h1>
-            <Link to="/createcourse">
-                <Button>
-                    Create new
-                </Button>
-            </Link>
             <Table dataSource={dataSource} columns={columns} />
         </>
     );
