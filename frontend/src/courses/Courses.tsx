@@ -79,6 +79,11 @@ export function Courses() {
                 Create new
             </Button>
         </Link>
+        <Link to="/editcourse">
+            <Button>
+                Edit
+            </Button>
+        </Link>
         <Table dataSource={courses} columns={columns} />
     </>;
 }
