@@ -28,13 +28,13 @@
     "import/no-unresolved": "off",
     "react/prop-types": "off",
     "react/jsx-filename-extension": "off",
-    "indent": ["error", 4],
-    "react/jsx-indent": ["error", 4],
-    "@typescript-eslint/indent": ["error", 4],
-    "quotes": ["error", "double"],
-    "linebreak-style": ["error", "windows"],
+    "indent": ["warn", 4],
+    "react/jsx-indent": ["warn", 4],
+    "@typescript-eslint/indent": ["warn", 4],
+    "quotes": ["warn", "double"],
+    "linebreak-style": ["warn", "windows"],
     "jsx-quotes": [2, "prefer-double"],
-    "@typescript-eslint/quotes":["error", "double"],
+    "@typescript-eslint/quotes":["warn", "double"],
     "semi": [2, "always"]
   }
 

@@ -4,6 +4,9 @@ import {
 } from "react-router-dom";
 // import logo from './logo.svg';
 import "./App.css";
+import LoginButton from "./common/loginButton";
+import LogoutButton from "./common/logoutButton";
+import Profile from "./common/profile";
 
 function Home() {
     return <h2>Home</h2>;
@@ -32,6 +35,15 @@ export default function App() {
                         <li>
                             <Link to="/users">Users</Link>
                         </li>
+                        <li>
+                            <Link to="/profile">Profile</Link>
+                        </li>
+                        <li>
+                            <LoginButton />
+                        </li>
+                        <li>
+                            <LogoutButton />
+                        </li>
                     </ul>
                 </nav>
 
@@ -43,6 +55,9 @@ export default function App() {
                     </Route>
                     <Route path="/users">
                         <Users />
+                    </Route>
+                    <Route path="/profile">
+                        <Profile />
                     </Route>
                     <Route path="/">
                         <Home />
