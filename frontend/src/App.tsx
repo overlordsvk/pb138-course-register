@@ -9,6 +9,7 @@ import {
 import "./App.css";
 import MainMenu from "./MainMenu";
 import CreateCourse from "./CreateCourse";
+import EditCourse from "./EditCourse";
 
 const { Header, Content, Footer } = Layout;
 
@@ -97,6 +98,11 @@ function Courses() {
                     Create new
                 </Button>
             </Link>
+            <Link to="/editcourse">
+                <Button>
+                    Edit
+                </Button>
+            </Link>
             <Table dataSource={dataSource} columns={columns} />
         </>
     );
@@ -121,8 +127,8 @@ export default function App() {
                     <MainMenu />
 
                 </Header>
-                <Content style={{ padding: "0 50px" }}>
-                    <Breadcrumb style={{ margin: "16px 0" }}>
+                <Content className="content">
+                    <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                         <Breadcrumb.Item>List</Breadcrumb.Item>
                         <Breadcrumb.Item>App</Breadcrumb.Item>
@@ -144,13 +150,16 @@ export default function App() {
                             <Route path="/createcourse">
                                 <CreateCourse />
                             </Route>
+                            <Route path="/editcourse">
+                                <EditCourse />
+                            </Route>
                             <Route path="/">
                                 <Home />
                             </Route>
                         </Switch>
                     </div>
                 </Content>
-                <Footer style={{ textAlign: "center" }}>pb138 ©2021</Footer>
+                <Footer className="footer">pb138 ©2021</Footer>
             </Layout>
         </Router>
     );
