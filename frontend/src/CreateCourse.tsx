@@ -2,7 +2,7 @@ import {
     Form, Input, Button, DatePicker, Cascader, InputNumber 
 } from "antd";
 import React from "react";
-import "./CreateCourse.css";
+// import "./CreateCourse.css";
 import * as moment from "moment";
 import { RangeValue } from "rc-picker/lib/interface";
 import TextArea from "antd/lib/input/TextArea";
