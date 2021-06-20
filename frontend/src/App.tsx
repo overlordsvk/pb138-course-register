@@ -54,7 +54,7 @@ function MyCourses() {
       
     return <>
         <h1>My Courses</h1>
-        <Table dataSource={dataSource} columns={columns} />;
+        <Table dataSource={dataSource} columns={columns} />
     </>; 
 }
 function Courses() {
@@ -92,7 +92,7 @@ function Courses() {
                 Create new
             </Button>
         </Link>
-        <Table dataSource={dataSource} columns={columns} />;
+        <Table dataSource={dataSource} columns={columns} />
     </>;
 }
 

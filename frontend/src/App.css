@@ -39,12 +39,13 @@
 }
 
 .layout {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .site-layout-content {
-    min-height: 19em;
+    min-height: 25em;
     padding: 1.6em;
+    overflow: auto;
     background: #fff;
 }
 
