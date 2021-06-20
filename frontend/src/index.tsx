@@ -6,17 +6,20 @@ import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.css";
 import App from "./App";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { audienceUrl, authClientId, authDomain } from "./utils/constants";
+import { ApolloProviderWithAuth0 } from "./auth/ApolloProvider";
 
 ReactDOM.render(
     <React.StrictMode>
         <Auth0Provider
-            domain="dev-8-q69az8.eu.auth0.com"
-            clientId="hsOzJQmGkLHnpCHIX65T1K8HQzoi8Ag6"
+            domain={authDomain}
+            clientId={authClientId}
             redirectUri={window.location.origin}
-            audience="https://dev-8-q69az8.eu.auth0.com/api/v2/"
-            scope="read:current_user update:current_user_metadata"
-        >
-            <App />
+            audience={audienceUrl}
+            scope="read:current_user update:current_user_metadata">
+            <ApolloProviderWithAuth0>
+                <App />
+            </ApolloProviderWithAuth0>
         </Auth0Provider>
     </React.StrictMode>,
     document.getElementById("root"), 

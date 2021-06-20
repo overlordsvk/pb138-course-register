@@ -3,13 +3,15 @@ import {
 } from "antd";
 import React from "react";
 import {
-    BrowserRouter as Router, Switch, Route, Link,
+    BrowserRouter as  Router, Switch, Route, Link,
 } from "react-router-dom";
 // import logo from './logo.svg';
 import "./App.css";
 import MainMenu from "./MainMenu";
 import CreateCourse from "./CreateCourse";
-import Profile from "./common/profile";
+import { useAuth0 } from "@auth0/auth0-react";
+import Profile from "./common/Profile";
+import TestCourses from "./common/TestCourses";
 
 const { Header, Content, Footer } = Layout;
 
@@ -103,11 +105,13 @@ function Courses() {
     );
 }
 
-function Users() {
-    return <h2>Users</h2>;
-}
-
 export default function App() {
+    const { isLoading } = useAuth0();
+
+    if (isLoading) {
+        return <div>Loading</div>;
+    }
+  
     return (
         <Router>
             <Layout className="layout">
@@ -139,8 +143,8 @@ export default function App() {
                             <Route path="/courses">
                                 <Courses />
                             </Route>
-                            <Route path="/users">
-                                <Users />
+                            <Route path="/test-courses">
+                                <TestCourses />
                             </Route>
                             <Route path="/profile">
                                 <Profile />

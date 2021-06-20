@@ -3,13 +3,13 @@ import { Menu } from "antd";
 import { SolutionOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import "./MainMenu.css";
 import { Link } from "react-router-dom";
+import AuthenticationButton from "./auth/AuthenticationButton";
 
 function MainMenu() {
     const [current, setCurrent] = useState({ key: "mail" });
     return (
         <div>
             <Menu theme="dark" onClick={setCurrent} selectedKeys={[current.key]} mode="horizontal" >
-
                 <Menu.Item className="menu-item" key="mail" icon={<SolutionOutlined />}>
                     <Link to="/mycourses">
                         My courses
@@ -20,11 +20,18 @@ function MainMenu() {
                         Course list  
                     </Link>
                 </Menu.Item>
+                <Menu.Item key="profile" className="menu-item">
+                    <Link to="/profile">
+                        Profile
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="test-courses" className="menu-item">
+                    <Link to="/test-courses">
+                        Test courses
+                    </Link>
+                </Menu.Item>
                 <Menu.Item key="logout" className="menu-logout">
-                    <a>
-                        Logout
-                    </a>
-
+                    <AuthenticationButton />
                 </Menu.Item>
             </Menu>
         </div>
