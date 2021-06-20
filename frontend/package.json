@@ -30,7 +30,6 @@
     "eject": "react-scripts eject",
     "stylefix": "stylelint \"**/*.css\" --fix",
     "linter": "eslint . --ext \".tsx\" --fix"
-
   },
   "eslintConfig": {
     "extends": [
