@@ -1,12 +1,16 @@
+import {
+    Breadcrumb, Button, Layout, Table,
+} from "antd";
 import React from "react";
 import {
     BrowserRouter as Router, Switch, Route, Link,
 } from "react-router-dom";
 // import logo from './logo.svg';
 import "./App.css";
-import LoginButton from "./common/loginButton";
-import LogoutButton from "./common/logoutButton";
-import Profile from "./common/profile";
+import MainMenu from "./MainMenu";
+import CreateCourse from "./CreateCourse";
+
+const { Header, Content, Footer } = Layout;
 
 function Home() {
     return <h2>Home</h2>;
@@ -16,6 +20,88 @@ function About() {
     return <h2>About</h2>;
 }
 
+function MyCourses() {
+    const dataSource = [
+        {
+            key: "1",
+            name: "Mike",
+            age: 32,
+            address: "10 Downing Street",
+        },
+        {
+            key: "2",
+            name: "John",
+            age: 42,
+            address: "10 Downing Street",
+        },
+    ];
+
+    const columns = [
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Age",
+            dataIndex: "age",
+            key: "age",
+        },
+        {
+            title: "Address",
+            dataIndex: "address",
+            key: "address",
+        },
+    ];
+
+    return (
+        <>
+            <h1>My Courses</h1>
+            <Table dataSource={dataSource} columns={columns} />
+        </>
+    );
+}
+function Courses() {
+    const dataSource = [
+        {
+            key: "1",
+            name: "Mike",
+            age: 32,
+            address: "10 Downing Street",
+        },
+    ];
+
+    const columns = [
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Age",
+            dataIndex: "age",
+            key: "age",
+        },
+        {
+            title: "Address",
+            dataIndex: "address",
+            key: "address",
+        },
+    ];
+
+    return (
+        <>
+            <h1> Courses</h1>
+            <Link to="/createcourse">
+                <Button>
+                    Create new
+                </Button>
+            </Link>
+            <Table dataSource={dataSource} columns={columns} />
+        </>
+    );
+}
+
 function Users() {
     return <h2>Users</h2>;
 }
@@ -23,47 +109,49 @@ function Users() {
 export default function App() {
     return (
         <Router>
-            <div>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/users">Users</Link>
-                        </li>
-                        <li>
-                            <Link to="/profile">Profile</Link>
-                        </li>
-                        <li>
-                            <LoginButton />
-                        </li>
-                        <li>
-                            <LogoutButton />
-                        </li>
-                    </ul>
-                </nav>
+            <Layout className="layout">
+                <Header>
+                    <div className="logo">
+                        <h1 className="logo-text">
+                            <Link to="/">
+                                Courses Registration
+                            </Link>
+                        </h1>
+                    </div>
+                    <MainMenu />
 
-                {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-                <Switch>
-                    <Route path="/about">
-                        <About />
-                    </Route>
-                    <Route path="/users">
-                        <Users />
-                    </Route>
-                    <Route path="/profile">
-                        <Profile />
-                    </Route>
-                    <Route path="/">
-                        <Home />
-                    </Route>
-                </Switch>
-            </div>
+                </Header>
+                <Content style={{ padding: "0 50px" }}>
+                    <Breadcrumb style={{ margin: "16px 0" }}>
+                        <Breadcrumb.Item>Home</Breadcrumb.Item>
+                        <Breadcrumb.Item>List</Breadcrumb.Item>
+                        <Breadcrumb.Item>App</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div className="site-layout-content">
+                        <Switch>
+                            <Route path="/about">
+                                <About />
+                            </Route>
+                            <Route path="/mycourses">
+                                <MyCourses />
+                            </Route>
+                            <Route path="/courses">
+                                <Courses />
+                            </Route>
+                            <Route path="/users">
+                                <Users />
+                            </Route>
+                            <Route path="/createcourse">
+                                <CreateCourse />
+                            </Route>
+                            <Route path="/">
+                                <Home />
+                            </Route>
+                        </Switch>
+                    </div>
+                </Content>
+                <Footer style={{ textAlign: "center" }}>pb138 ©2021</Footer>
+            </Layout>
         </Router>
     );
 }
