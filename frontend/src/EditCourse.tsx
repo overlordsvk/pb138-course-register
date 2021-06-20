@@ -19,17 +19,20 @@ const layout = {
 
 const course = {
     "id": 1,
-    "name": "IB102",
-    "detail": "Simple introduction to algorithms for dummies",
+    "code": "IB102",
+    "detail": "Simple introduction to algorithms for dummies\nwith very very \nlong description\nand many rows",
     "capacity": 100,
     "enrolment_start": "2021-02-10T00:00:00+00:00",
     "enrolment_end": "2021-07-10T00:00:00+00:00",
+    "semester_id": 1,
+    "name": "Simple introduction to algorithms for dummies",
     "semester": {
         "id": 1,
         "term": "Spring",
         "year": 2021
     }
 };
+
 
 
 
@@ -54,6 +57,7 @@ const semesters :Semester[] = [
 const options = getSemestersAsCascaderOptions(semesters);
 
 const initialValues={
+    "course-code":course.code,
     "course-name":course.name,
     "course-detail":course.detail,
     "capacity":course.capacity,
@@ -72,8 +76,11 @@ function EditCourse() {
     };
     return (
         <>
-            <h1>Edit course {course.name}</h1>
+            <h1>Edit course {course.code}</h1>
             <Form {...layout} onFinish={onFinish} onFinishFailed={onFinishFailed} initialValues={initialValues}>
+                <Form.Item label="Course code" name="course-code" rules={[{ required: true, message: "Please input code for the course", whitespace: false }]}>
+                    <Input placeholder="Course code" />
+                </Form.Item>
                 <Form.Item label="Course name" name="course-name" rules={[{ required: true, message: "Please input name for the course", whitespace: true }]}>
                     <Input placeholder="Course name" />
                 </Form.Item>

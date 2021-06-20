@@ -44,6 +44,9 @@ function CreateCourse() {
         <>
             <h1>Create new course</h1>
             <Form {...layout} onFinish={onFinish} onFinishFailed={onFinishFailed}>
+                <Form.Item label="Course code" name="course-code" rules={[{ required: true, message: "Please input code for the course", whitespace: false }]}>
+                    <Input placeholder="Course code" />
+                </Form.Item>
                 <Form.Item label="Course name" name="course-name" rules={[{ required: true, message: "Please input name for the course", whitespace: true }]}>
                     <Input placeholder="Course name" />
                 </Form.Item>

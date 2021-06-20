@@ -11,6 +11,7 @@ import MainMenu from "./MainMenu";
 import CreateCourse from "./CreateCourse";
 import EditCourse from "./EditCourse";
 import { Courses } from "./courses/Courses";
+import CourseDetail from "./CourseDetail";
 
 const { Header, Content, Footer } = Layout;
 
@@ -121,6 +122,9 @@ export default function App() {
                             </Route>
                             <Route path="/editcourse">
                                 <EditCourse />
+                            </Route>
+                            <Route path="/detail">
+                                <CourseDetail />
                             </Route>
                             <Route path="/">
                                 <Home />

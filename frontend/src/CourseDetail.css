@@ -1,0 +1,10 @@
+.progressbar {
+    width: 20em;
+    margin-left: 1em;
+}
+
+@media (max-width: 470px) {
+    .progressbar {
+        width: 60%;
+    }
+}
