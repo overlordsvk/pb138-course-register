@@ -9,6 +9,7 @@ import {
 import "./App.css";
 import MainMenu from "./MainMenu";
 import CreateCourse from "./CreateCourse";
+import Profile from "./common/profile";
 
 const { Header, Content, Footer } = Layout;
 
@@ -140,6 +141,9 @@ export default function App() {
                             </Route>
                             <Route path="/users">
                                 <Users />
+                            </Route>
+                            <Route path="/profile">
+                                <Profile />
                             </Route>
                             <Route path="/createcourse">
                                 <CreateCourse />
