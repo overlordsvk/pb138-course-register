@@ -5,13 +5,13 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.css";
 import App from "./App";
-import MainMenu from "./Menu";
+// import MainMenu from "./Menu";
 
 ReactDOM.render(
     <React.StrictMode>
         {/* <TopMenu /> */}
         <App />
-        <MainMenu></MainMenu>
+        {/* <MainMenu></MainMenu> */}
     </React.StrictMode>,
     document.getElementById("root"),
 );

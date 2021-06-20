@@ -7,10 +7,10 @@ function MainMenu() {
     return (
         <Menu onClick={setCurrent} selectedKeys={[current.key]} mode="horizontal" >
             <Menu.Item key="mail">
-                Navigation One
+                My Subjects
             </Menu.Item>
             <Menu.Item key="app">
-                Navigation Two
+                Subject List
             </Menu.Item>
             <SubMenu key="SubMenu" title="Navigation Three - Submenu">
                 <Menu.ItemGroup title="Item 1">
@@ -32,3 +32,5 @@ function MainMenu() {
 }
 
 export default MainMenu;
+
+
