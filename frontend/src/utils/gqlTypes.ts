@@ -47,3 +47,7 @@ export interface Semester {
 export interface Role {
     name: string;
 }
+
+export interface UserRole {
+    users: User[];
+}

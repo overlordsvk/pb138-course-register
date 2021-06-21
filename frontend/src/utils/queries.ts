@@ -91,3 +91,22 @@ export const UPDATE_COURSE = gql`
         }
     }
 `;
+export const GET_USER_ROLE = gql`
+    query UserRole($id: String!) {
+        users(where: { auth0_id: { _eq: $id } }) {
+            role
+        }
+    }
+`;
+
+export const MY_COURSES = gql`
+    query MyCourses($id: String!) {
+        enrolment(where: { user: { auth0_id: { _eq: $id } } }) {
+            course {
+                code
+                id
+                name
+            }
+        }
+    }
+`;
