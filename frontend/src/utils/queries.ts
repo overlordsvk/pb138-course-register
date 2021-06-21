@@ -63,3 +63,15 @@ export const CREATE_COURSE = gql`
         }
     }
 `;
+
+export const MY_COURSES = gql`
+query MyCourses($id: String!) {
+    enrolment(where: {user: {auth0_id: {_eq: $id}}}) {
+      course {
+        code
+        id
+        name
+      }
+    }
+  }        
+`;
