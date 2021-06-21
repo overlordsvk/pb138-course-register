@@ -16,16 +16,19 @@ const layout = {
 const semesters: Semester[] = [
     {
         id: 1,
+        name: "aaa",
         year: 2021,
         term: "Spring",
     },
     {
         id: 4,
+        name: "aaa",
         year: 2021,
         term: "Autumn",
     },
     {
         id: 3,
+        name: "aaa",
         year: 2020,
         term: "Spring",
     },

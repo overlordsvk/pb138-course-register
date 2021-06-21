@@ -64,3 +64,11 @@ export const CREATE_COURSE = gql`
         }
     }
 `;
+
+export const GET_USER_ROLE = gql`
+    query UserRole ($id: String!) {
+        users( where: { auth0_id: { _eq: $id } } ) {
+            role
+        }
+    }
+`;
