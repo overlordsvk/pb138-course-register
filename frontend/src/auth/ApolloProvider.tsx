@@ -25,7 +25,7 @@ const ApolloProviderWithAuth0 = ({ children }: any) => {
             setUserState(tmpUser);
         }
     }, [user]);
- 
+
     const authLink = setContext(async (_, { headers, ...rest }) => {
         let token;
         try {

@@ -21,7 +21,6 @@ import { CourseReply } from "../utils/gqlTypes";
 import { useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { LoadingOutlined } from "@ant-design/icons";
-// import Loading from "../common/Loading";
 
 const teacher = false;
 
@@ -31,7 +30,7 @@ function CourseDetail() {
 
     let { id } = useParams<{ id: string }>();
     if (isNaN(Number(id))) return <NotFound />;
-    const userId = useRecoilValue(userState);
+    const appUser = useRecoilValue(userState);
 
     const { loading, error, data } = useQuery<CourseReply>(GET_COURSE, {
         variables: { id: +id },
@@ -54,7 +53,7 @@ function CourseDetail() {
     const course = data?.course[0];
     const enrolledStudents = course.enrolments.length!;
     const isAlreadyEnrolled =
-        course.enrolments.find((e) => e.user_id == userId) == undefined;
+        course.enrolments.find((e) => e.user_id == appUser.id) == undefined;
 
     const isRegistrationEnabled =
         dayjs(course.enrolment_start) < dayjs() &&
@@ -65,7 +64,7 @@ function CourseDetail() {
         setShowLoading(true);
 
         await createEnrolment({
-            variables: { id: +id, user_id: userId },
+            variables: { id: +id, user_id: appUser.id },
         });
         setShowLoading(false);
 
