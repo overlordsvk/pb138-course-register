@@ -110,3 +110,11 @@ export const MY_COURSES = gql`
         }
     }
 `;
+
+export const CREATE_ENROLMENT = gql`
+    mutation CreateEnrolment($id: Int!, $user_id: String!) {
+        insert_enrolment_one(object: { course_id: $id, user_id: $user_id }) {
+            course_id
+        }
+    }
+`;

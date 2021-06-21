@@ -1,34 +1,44 @@
-import React from "react";
-import { message, Popconfirm, Progress, Skeleton, Space, Tooltip } from "antd";
+import React, { useState } from "react";
+import {
+    Alert,
+    message,
+    Popconfirm,
+    Progress,
+    Skeleton,
+    Space,
+    Spin,
+    Tooltip,
+} from "antd";
 import dayjs from "dayjs";
 import "./CourseDetail.css";
 import Button from "antd/es/button";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { Redirect, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
 import NotFound from "../status/NotFound";
-import { GET_COURSE } from "../utils/queries";
+import { CREATE_ENROLMENT, GET_COURSE } from "../utils/queries";
 import ServerError from "../status/ServerError";
 import { CourseReply } from "../utils/gqlTypes";
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
+import { LoadingOutlined } from "@ant-design/icons";
 // import Loading from "../common/Loading";
 
 const teacher = false;
-function confirm(e: any) {
-    console.log(e);
-    const success = true;
-    if (success) {
-        message.success("Course registered");
-    } else {
-        message.error("Something went wrong");
-    }
-}
 
 function CourseDetail() {
+    const [showLoading, setShowLoading] = useState(false);
+    const [done, setDone] = useState(false);
+
     let { id } = useParams<{ id: string }>();
     if (isNaN(Number(id))) return <NotFound />;
+    const userId = useRecoilValue(userState);
 
     const { loading, error, data } = useQuery<CourseReply>(GET_COURSE, {
         variables: { id: +id },
     });
+    const [createEnrolment] = useMutation(CREATE_ENROLMENT);
+
+    if (done) return <Redirect to="/courses" />;
     if (loading)
         return (
             <Skeleton
@@ -42,15 +52,33 @@ function CourseDetail() {
 
     if (data?.course.length == 0 || data?.course[0] == undefined)
         return <NotFound />;
-    const enrolledStudents = data?.course[0].enrolments.length!;
     const course = data?.course[0];
+    const enrolledStudents = course.enrolments.length!;
+    const isAlreadyEnrolled =
+        course.enrolments.find((e) => e.user_id == userId) == undefined;
 
     const isRegistrationEnabled =
         dayjs(course.enrolment_start) < dayjs() &&
         dayjs() < dayjs(course.enrolment_end) &&
         enrolledStudents < course.capacity;
+
+    async function confirm(e: any) {
+        setShowLoading(true);
+
+        console.log(e);
+        await createEnrolment({
+            variables: { id: +id, user_id: userId },
+        });
+        setShowLoading(false);
+
+        message.success("You have succesfuly enrolled in " + course.code);
+        setDone(true);
+    }
     return (
-        <>
+        <Spin
+            spinning={showLoading}
+            indicator={<LoadingOutlined style={{ fontSize: 80 }} spin />}
+        >
             <Space direction="vertical">
                 <div>
                     <h1>{`${course.code}: ${course.name}`}</h1>
@@ -97,8 +125,17 @@ function CourseDetail() {
                     </p>
                 </div>
 
-                {/*TODO: if already registered show message and unregister choice*/}
-                {teacher ? (
+                {/*TODO: if already registered show unregister choice*/}
+
+                {isAlreadyEnrolled ? (
+                    <Alert
+                        message="You are enroled in this course!"
+                        type="info"
+                    />
+                ) : (
+                    <></>
+                )}
+                {teacher || isAlreadyEnrolled ? (
                     <></>
                 ) : (
                     <Popconfirm
@@ -126,7 +163,7 @@ function CourseDetail() {
                     </Popconfirm>
                 )}
             </Space>
-        </>
+        </Spin>
     );
 }
 
