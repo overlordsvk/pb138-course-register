@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { Link } from "react-router-dom";
 import { MY_COURSES } from "../utils/queries";
-import NotFound from "../status/NotFound";
 import ServerError from "../status/ServerError";
 
 interface myCourse{
@@ -37,9 +36,9 @@ function MyCourses() {
     console.log("error");
     console.log(error);
     if (error) return <ServerError />;
-
+    console.log(data);
     if (data?.enrolment.length == 0 || data?.enrolment[0] == undefined)
-        return <NotFound />;
+        return <h1> No courses found </h1>;
         
     const dataSource = data.enrolment.map((enrolment: myCourse) => {
         return {
