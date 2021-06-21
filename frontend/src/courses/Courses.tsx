@@ -1,9 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Table } from "antd";
-import { ApolloClient, InMemoryCache, gql, useQuery } from "@apollo/client";
-import { number, string } from "yargs";
-import { identifier } from "@babel/types";
+import { gql, useQuery } from "@apollo/client";
 
 // const query = query MyQuery {
 //     course {
@@ -26,20 +24,15 @@ interface ICourseDataCourse {
     capacity: number;
     enrolments_aggregate: {
         aggregate: {
-            count : number;
+            count: number;
         }
     }
-}; 
+}
 
 interface ICourseData {
-    course : ICourseDataCourse[];
-}; 
+    course: ICourseDataCourse[];
+}
 
-
-const client = new ApolloClient({
-    uri: "https://suited-pup-54.hasura.app/v1/graphql",
-    cache: new InMemoryCache()
-  });
 
 const TheCourses = gql`
   query Courses {
@@ -60,19 +53,19 @@ const TheCourses = gql`
 
 export function Courses() {
     console.log("courses");
-    const {loading, error, data } = useQuery(TheCourses);
+    const { loading, error, data } = useQuery(TheCourses);
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
 
-    const CourseData:ICourseData = data;
+    const CourseData: ICourseData = data;
 
     const Courses = CourseData.course.map((course: ICourseDataCourse) => {
         return {
             id: course.id,
-        code: course.code,    
-        name: course.name,
-        detail: course.detail,
-        capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
+            code: course.code,
+            name: course.name,
+            detail: course.detail,
+            capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
         };
     });
 
@@ -95,18 +88,16 @@ export function Courses() {
         {
             title: "",
             dataIndex: "id",
-            key: 'id',
+            key: "id",
             render: (id: number) => {
                 const isTeacher = true;
                 const path = `course/${id}/edit`;
-                if (isTeacher) {
-                    return <Link to={path}>
-                        <Button> Edit </Button>
-                    </Link>;
-                }
-                else {
-                    return <></>
-                }
+                if (!isTeacher)
+                    return <></>;
+                return <Link to={path}>
+                    <Button> Edit </Button>
+                </Link>;
+
 
             }
         },
@@ -118,7 +109,7 @@ export function Courses() {
                 const path = `course/${id}`;
                 return <Link to={path}>
                     <Button>{"detail"}</Button>
-                </Link>
+                </Link>;
             }
         },
         {
@@ -134,7 +125,7 @@ export function Courses() {
             <Link to="/course/new">
                 <Button>Create new</Button>
             </Link>
-                <Table dataSource={Courses} columns={columns} />            
+            <Table dataSource={Courses} columns={columns} />
         </>
     );
 }
