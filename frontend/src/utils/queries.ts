@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_COURSE = gql`
-    query CourseDetailnew($id: Int!) {
+    query CourseDetail($id: Int!) {
         course(where: { id: { _eq: $id } }) {
             capacity
             code
@@ -64,22 +64,57 @@ export const CREATE_COURSE = gql`
     }
 `;
 
+export const UPDATE_COURSE = gql`
+    mutation UpdateCourse(
+        $id: Int!
+        $code: String!
+        $name: String!
+        $detail: String!
+        $capacity: Int!
+        $enrolment_start: timestamptz!
+        $enrolment_end: timestamptz!
+        $semester_id: Int!
+    ) {
+        update_course_by_pk(
+            pk_columns: { id: $id }
+            _set: {
+                code: $code
+                name: $name
+                detail: $detail
+                capacity: $capacity
+                enrolment_start: $enrolment_start
+                enrolment_end: $enrolment_end
+                semester_id: $semester_id
+            }
+        ) {
+            id
+        }
+    }
+`;
 export const GET_USER_ROLE = gql`
-    query UserRole ($id: String!) {
-        users( where: { auth0_id: { _eq: $id } } ) {
+    query UserRole($id: String!) {
+        users(where: { auth0_id: { _eq: $id } }) {
             role
         }
     }
 `;
 
 export const MY_COURSES = gql`
-query MyCourses($id: String!) {
-    enrolment(where: {user: {auth0_id: {_eq: $id}}}) {
-      course {
-        code
-        id
-        name
-      }
+    query MyCourses($id: String!) {
+        enrolment(where: { user: { auth0_id: { _eq: $id } } }) {
+            course {
+                code
+                id
+                name
+            }
+        }
     }
-  }        
+`;
+
+export const CREATE_ENROLMENT = gql`
+    mutation CreateEnrolment($id: Int!, $user_id: String!) {
+        insert_enrolment_one(object: { course_id: $id, user_id: $user_id }) {
+            course_id
+        }
+    }
 `;

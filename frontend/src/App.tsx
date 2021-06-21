@@ -5,10 +5,9 @@ import "./App.css";
 import MainMenu from "./menu/MainMenu";
 import { useAuth0 } from "@auth0/auth0-react";
 import ContentRouting from "./ContentRouting";
-import Breadcrumbs from "./Breadcrumbs";
 import { userState } from "./state/userState";
 import { useSetRecoilState } from "recoil";
-import { Spin } from "antd";
+import Loading from "./common/Loading";
 
 const { Header, Content, Footer } = Layout;
 
@@ -17,7 +16,7 @@ export default function App() {
     const { user, isLoading } = useAuth0();
 
     if (isLoading) {
-        return <Spin size="large" />;
+        return loadingLayout;
     }
 
     if (user) {
@@ -32,7 +31,7 @@ export default function App() {
                     <MainMenu />
                 </Header>
                 <Content className="content">
-                    <Breadcrumbs />
+                    <div style={{ height: "2em" }} />
                     <ContentRouting />
                 </Content>
                 <Footer className="footer">pb138 ©2021</Footer>
@@ -50,3 +49,22 @@ function Logo() {
         </div>
     );
 }
+
+const loadingLayout = (
+    <Layout className="layout">
+        <Header>
+            <div className="logo">
+                <h1 className="logo-text">
+                    <a>Courses Registration</a>
+                </h1>
+            </div>
+        </Header>
+        <Content className="content">
+            <div style={{ height: "2em" }} />
+            <div className="site-layout-content">
+                <Loading />
+            </div>
+        </Content>
+        <Footer className="footer">pb138 ©2021</Footer>
+    </Layout>
+);
