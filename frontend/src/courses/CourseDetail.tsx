@@ -47,7 +47,6 @@ function CourseDetail() {
                 paragraph={{ rows: 13 }}
             />
         );
-    console.log(error);
     if (error) return <ServerError />;
 
     if (data?.course.length == 0 || data?.course[0] == undefined)
@@ -62,10 +61,9 @@ function CourseDetail() {
         dayjs() < dayjs(course.enrolment_end) &&
         enrolledStudents < course.capacity;
 
-    async function confirm(e: any) {
+    async function confirm() {
         setShowLoading(true);
 
-        console.log(e);
         await createEnrolment({
             variables: { id: +id, user_id: userId },
         });

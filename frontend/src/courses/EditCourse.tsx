@@ -97,13 +97,9 @@ function EditCourse() {
                 semester_id: values.semester[1],
             },
         });
-        console.log("Success:", values);
         setShowLoading(false);
         message.success("Updated course");
         setDone(true);
-    };
-    const onFinishFailed = (errorInfo: any) => {
-        console.log("Failed:", errorInfo);
     };
 
     return (
@@ -116,7 +112,6 @@ function EditCourse() {
                 <Form
                     {...layout}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
                     initialValues={initialValues}
                 >
                     <Form.Item

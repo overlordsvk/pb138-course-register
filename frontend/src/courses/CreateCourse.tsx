@@ -62,7 +62,7 @@ function CreateCourse() {
 
     const onFinish = async (values: any) => {
         setShowLoading(true);
-        const createdId = await createCourse({
+        await createCourse({
             variables: {
                 code: values.code,
                 name: values.name,
@@ -75,14 +75,11 @@ function CreateCourse() {
             },
         });
 
-        console.log("Success:", values);
-        console.log("ID:", createdId);
         setShowLoading(false);
         message.success("Created course");
         setDone(true);
     };
-    const onFinishFailed = (errorInfo: any) => {
-        console.log("Failed:", errorInfo);
+    const onFinishFailed = () => {
         message.error("Check iputs");
     };
     return (
