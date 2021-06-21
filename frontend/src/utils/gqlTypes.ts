@@ -7,38 +7,38 @@ export interface CourseReply {
 }
 
 export interface Course {
-    capacity:        number;
-    code:            string;
-    detail:          string;
-    enrolment_end:   string;
+    capacity: number;
+    code: string;
+    detail: string;
+    enrolment_end: string;
     enrolment_start: string;
-    id:              number;
-    name:            string;
-    semester_id:     number;
-    teacher_id:      string;
-    enrolments:      Enrolment[];
-    semester:        Semester;
-    teacher:         User;
+    id: number;
+    name: string;
+    semester_id: number;
+    teacher_id: string;
+    enrolments: Enrolment[];
+    semester: Semester;
+    teacher: User;
 }
 
 export interface Enrolment {
-    course_id:  number;
+    course_id: number;
     enroled_at: string;
-    user_id:    string;
-    user:       User;
+    user_id: string;
+    user: User;
 }
 
 export interface User {
-    role:       string;
-    name:       string;
-    last_seen:  string;
-    email:      string;
+    role: string;
+    name: string;
+    last_seen: string;
+    email: string;
     created_at: string;
-    auth0_id:   string;
+    auth0_id: string;
 }
 
 export interface Semester {
-    id:   number;
+    id: number;
     name: string;
     term: string;
     year: number;
@@ -46,4 +46,8 @@ export interface Semester {
 
 export interface Role {
     name: string;
+}
+
+export interface UserRole {
+    users: User[];
 }
