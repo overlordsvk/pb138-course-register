@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { useAuth0 } from "@auth0/auth0-react";
 import { hasuraUrl } from "../utils/constants";
 
-const ApolloProviderWithAuth0 = ({ children } : any ) => {
+const ApolloProviderWithAuth0 = ({ children }: any) => {
     const { getAccessTokenSilently } = useAuth0();
 
     const httpLink = new HttpLink({
@@ -26,6 +26,7 @@ const ApolloProviderWithAuth0 = ({ children } : any ) => {
         }
 
         if (!token) return { headers, ...rest };
+
         return {
             ...rest,
             headers: {
