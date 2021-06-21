@@ -3,6 +3,8 @@ import { Form, Input, Button, Cascader, InputNumber } from "antd";
 import { DatePicker } from "../dateComponents";
 import TextArea from "antd/lib/input/TextArea";
 import { getSemestersAsCascaderOptions, Semester } from "../utils/helpers";
+import { useMutation } from "@apollo/client";
+import { CREATE_COURSE } from "../utils/queries";
 
 const { RangePicker } = DatePicker;
 
@@ -32,7 +34,21 @@ const semesters: Semester[] = [
 const options = getSemestersAsCascaderOptions(semesters);
 
 function CreateCourse() {
+    // eslint-disable-next-line no-unused-vars
+    const [createCourse] = useMutation(CREATE_COURSE);
     const onFinish = (values: any) => {
+        createCourse({
+            variables: {
+                code: values.code,
+                name: values.name,
+                detail: values.detail,
+                capacity: values.capacity,
+                enrolment_start: values.timeIntervals[0],
+                enrolment_end: values.timeIntervals[1],
+                semester_id: 1,
+                teacher_id: 1,
+            },
+        });
         console.log("Success:", values);
     };
     const onFinishFailed = (errorInfo: any) => {
@@ -48,7 +64,7 @@ function CreateCourse() {
             >
                 <Form.Item
                     label="Course code"
-                    name="course-code"
+                    name="code"
                     rules={[
                         {
                             required: true,
@@ -61,7 +77,7 @@ function CreateCourse() {
                 </Form.Item>
                 <Form.Item
                     label="Course name"
-                    name="course-name"
+                    name="name"
                     rules={[
                         {
                             required: true,
@@ -72,7 +88,7 @@ function CreateCourse() {
                 >
                     <Input placeholder="Course name" />
                 </Form.Item>
-                <Form.Item label="Detail" name="course-detail">
+                <Form.Item label="Detail" name="detail">
                     <TextArea rows={4} placeholder="Detail" />
                 </Form.Item>
                 <Form.Item
@@ -100,7 +116,7 @@ function CreateCourse() {
                 </Form.Item>
                 <Form.Item
                     label="Registration availability time"
-                    name="registration-time-interval"
+                    name="timeIntervals"
                 >
                     <RangePicker showTime />
                 </Form.Item>

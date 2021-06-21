@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { getSemestersAsCascaderOptions } from "../utils/helpers";
 import { useParams } from "react-router-dom";
 import NotFound from "../status/NotFound";
-import { getCourse, getSemesters } from "../utils/queries";
+import { GET_COURSE, GET_SEMESTERS } from "../utils/queries";
 import { useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import { CourseReply, SemestersReply } from "../utils/gqlTypes";
@@ -26,12 +26,14 @@ function EditCourse() {
         loading: loadingCourse,
         error: errorCourse,
         data: dataCourse,
-    } = useQuery<CourseReply>(getCourse(+id));
+    } = useQuery<CourseReply>(GET_COURSE, {
+        variables: { id: +id },
+    });
     const {
         loading: loadingSemesters,
         error: errorSemesters,
         data: dataSemesters,
-    } = useQuery<SemestersReply>(getSemesters());
+    } = useQuery<SemestersReply>(GET_SEMESTERS);
     if (loadingCourse || loadingSemesters)
         return (
             <Skeleton

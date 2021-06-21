@@ -6,7 +6,7 @@ import Button from "antd/es/button";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import NotFound from "../status/NotFound";
-import { getCourse } from "../utils/queries";
+import { GET_COURSE } from "../utils/queries";
 import ServerError from "../status/ServerError";
 import { CourseReply } from "../utils/gqlTypes";
 // import Loading from "../common/Loading";
@@ -26,7 +26,9 @@ function CourseDetail() {
     let { id } = useParams<{ id: string }>();
     if (isNaN(Number(id))) return <NotFound />;
 
-    const { loading, error, data } = useQuery<CourseReply>(getCourse(+id));
+    const { loading, error, data } = useQuery<CourseReply>(GET_COURSE, {
+        variables: { id: +id },
+    });
     if (loading)
         return (
             <Skeleton
@@ -35,6 +37,7 @@ function CourseDetail() {
                 paragraph={{ rows: 13 }}
             />
         );
+    console.log(error);
     if (error) return <ServerError />;
 
     if (data?.course.length == 0 || data?.course[0] == undefined)
