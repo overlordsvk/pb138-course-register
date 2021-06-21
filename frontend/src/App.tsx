@@ -5,7 +5,6 @@ import "./App.css";
 import MainMenu from "./menu/MainMenu";
 import { useAuth0 } from "@auth0/auth0-react";
 import ContentRouting from "./ContentRouting";
-import Breadcrumbs from "./Breadcrumbs";
 import { userState } from "./state/userState";
 import { useSetRecoilState } from "recoil";
 import Loading from "./common/Loading";
@@ -32,7 +31,7 @@ export default function App() {
                     <MainMenu />
                 </Header>
                 <Content className="content">
-                    <Breadcrumbs />
+                    <div style={{ height: "2em" }} />
                     <ContentRouting />
                 </Content>
                 <Footer className="footer">pb138 ©2021</Footer>
@@ -61,7 +60,7 @@ const loadingLayout = (
             </div>
         </Header>
         <Content className="content">
-            <Breadcrumbs />
+            <div style={{ height: "2em" }} />
             <div className="site-layout-content">
                 <Loading />
             </div>
