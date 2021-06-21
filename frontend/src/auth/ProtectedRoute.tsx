@@ -11,9 +11,9 @@ import Loading from "../common/Loading";
 
 const ProtectedRoute: React.FC<RouteProps> = ({ path, children, ...rest }) => {
     const { isAuthenticated } = useAuth0();
-    const userId = useRecoilValue(userState);
+    const appUser = useRecoilValue(userState);
     const { loading, data } = useQuery<UserRole>(GET_USER_ROLE, {
-        variables: { id: userId },
+        variables: { id: appUser.id },
     });
 
     if (loading)

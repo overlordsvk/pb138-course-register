@@ -6,23 +6,36 @@ import MainMenu from "./menu/MainMenu";
 import { useAuth0 } from "@auth0/auth0-react";
 import ContentRouting from "./ContentRouting";
 import Breadcrumbs from "./Breadcrumbs";
-import { userState } from "./state/userState";
-import { useSetRecoilState } from "recoil";
 import { Spin } from "antd";
+import { userState } from "./state/userState";
+import { useRecoilState } from "recoil";
+import { useQuery } from "@apollo/client";
+import { GET_USER_ROLE } from "./utils/queries";
+import { UserRole } from "./utils/gqlTypes";
+import { useEffect } from "react";
+import ServerError from "./status/ServerError";
 
 const { Header, Content, Footer } = Layout;
 
 export default function App() {
-    const setUserState = useSetRecoilState(userState);
-    const { user, isLoading } = useAuth0();
+    const { isLoading } = useAuth0();
+    const [appUser, setUserState] = useRecoilState(userState); //setUserState
+    const { loading, data, error } = useQuery<UserRole>(GET_USER_ROLE, {
+        variables: { id: appUser.id },
+    });
 
-    if (isLoading) {
+    useEffect(() => {
+        if (data && data.users[0]) {
+            console.log(data.users[0].role);
+            const u = { id: appUser.id, name: appUser.name, role: data.users[0].role, email: appUser.email, picture: appUser.picture };
+            setUserState(u);
+        }
+    }, [data]);
+
+    if (isLoading || loading) {
         return <Spin size="large" />;
     }
-
-    if (user) {
-        setUserState(user.sub ?? "");
-    }
+    if (error) return <ServerError />;
 
     return (
         <Router>
@@ -50,3 +63,4 @@ function Logo() {
         </div>
     );
 }
+

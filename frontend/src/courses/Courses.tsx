@@ -50,8 +50,7 @@ export function Courses() {
                 paragraph={{ rows: 13 }}
             />
         );
-    console.log("error");
-    console.log(error);
+
     if (error) return <ServerError />;
 
     if (data?.course.length == 0 || data?.course[0] == undefined)
