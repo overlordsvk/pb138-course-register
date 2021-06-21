@@ -6,14 +6,22 @@ import MainMenu from "./menu/MainMenu";
 import { useAuth0 } from "@auth0/auth0-react";
 import ContentRouting from "./ContentRouting";
 import Breadcrumbs from "./Breadcrumbs";
+import { userState } from "./state/userState";
+import { useSetRecoilState } from "recoil";
+import { Spin } from "antd";
 
 const { Header, Content, Footer } = Layout;
 
 export default function App() {
-    const { isLoading } = useAuth0();
+    const setUserState = useSetRecoilState(userState);
+    const { user, isLoading } = useAuth0();
 
     if (isLoading) {
-        return <div>Loading</div>;
+        return <Spin size="large" />;
+    }
+
+    if (user) {
+        setUserState(user.sub ?? "");
     }
 
     return (
