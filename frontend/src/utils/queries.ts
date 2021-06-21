@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_COURSE = gql`
-    query CourseDetail($id: Int!) {
+    query CourseDetailnew($id: Int!) {
         course(where: { id: { _eq: $id } }) {
             capacity
             code
@@ -19,7 +19,6 @@ export const GET_COURSE = gql`
             }
             enrolments {
                 user {
-                    id
                     name
                 }
             }
@@ -46,7 +45,7 @@ export const CREATE_COURSE = gql`
         $enrolment_start: timestamptz!
         $enrolment_end: timestamptz!
         $semester_id: Int!
-        $teacher_id: Int!
+        $teacher_id: String!
     ) {
         insert_course_one(
             object: {
@@ -71,4 +70,16 @@ export const GET_USER_ROLE = gql`
             role
         }
     }
+`;
+
+export const MY_COURSES = gql`
+query MyCourses($id: String!) {
+    enrolment(where: {user: {auth0_id: {_eq: $id}}}) {
+      course {
+        code
+        id
+        name
+      }
+    }
+  }        
 `;

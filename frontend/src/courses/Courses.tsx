@@ -1,22 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Table } from "antd";
+import { Button, Skeleton, Table } from "antd";
 import { gql, useQuery } from "@apollo/client";
+import ServerError from "../status/ServerError";
+import NotFound from "../status/NotFound";
 
-// const query = query MyQuery {
-//     course {
-//       capacity
-//       detail
-//       name
-//       enrolments_aggregate {
-//         aggregate {
-//           count
-//         }
-//       }
-//     }
-//   }
-
-interface ICourseDataCourse {
+interface allCourses {
     code: string;
     name: string;
     detail: string;
@@ -29,8 +18,8 @@ interface ICourseDataCourse {
     }
 }
 
-interface ICourseData {
-    course: ICourseDataCourse[];
+interface allCoursesReply {
+    course: allCourses[];
 }
 
 
@@ -52,14 +41,23 @@ const TheCourses = gql`
 `;
 
 export function Courses() {
-    console.log("courses");
-    const { loading, error, data } = useQuery(TheCourses);
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
+    const { loading, error, data } = useQuery<allCoursesReply>(TheCourses);
+    if (loading)
+        return (
+            <Skeleton
+                className={"detail-skeleton"}
+                active
+                paragraph={{ rows: 13 }}
+            />
+        );
+    console.log("error");
+    console.log(error);
+    if (error) return <ServerError />;
 
-    const CourseData: ICourseData = data;
+    if (data?.course.length == 0 || data?.course[0] == undefined)
+        return <NotFound />;
 
-    const Courses = CourseData.course.map((course: ICourseDataCourse) => {
+    const Courses = data.course.map((course: allCourses) => {
         return {
             id: course.id,
             code: course.code,
