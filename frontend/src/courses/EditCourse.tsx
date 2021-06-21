@@ -1,10 +1,16 @@
 import React from "react";
-import { Form, Input, Button, Cascader, InputNumber } from "antd";
+import { Form, Input, Button, Cascader, InputNumber, Skeleton } from "antd";
 import { DatePicker } from "../dateComponents";
 
 import TextArea from "antd/lib/input/TextArea";
 import dayjs from "dayjs";
-import { getSemestersAsCascaderOptions, Semester } from "../utils/helpers";
+import { getSemestersAsCascaderOptions } from "../utils/helpers";
+import { useParams } from "react-router-dom";
+import NotFound from "../status/NotFound";
+import { getCourse, getSemesters } from "../utils/queries";
+import { useQuery } from "@apollo/client";
+import ServerError from "../status/ServerError";
+import { CourseReply, SemestersReply } from "../utils/gqlTypes";
 
 const { RangePicker } = DatePicker;
 
@@ -13,60 +19,60 @@ const layout = {
     wrapperCol: { span: 8 },
 };
 
-const course = {
-    id: 1,
-    code: "IB102",
-    detail: "Simple introduction to algorithms for dummies\nwith very very \nlong description\nand many rows",
-    capacity: 100,
-    enrolment_start: "2021-02-10T00:00:00+00:00",
-    enrolment_end: "2021-07-10T00:00:00+00:00",
-    semester_id: 1,
-    name: "Simple introduction to algorithms for dummies",
-    semester: {
-        id: 1,
-        term: "Spring",
-        year: 2021,
-    },
-};
-
-const semesters: Semester[] = [
-    {
-        id: 1,
-        year: 2021,
-        term: "Spring",
-    },
-    {
-        id: 4,
-        year: 2021,
-        term: "Autumn",
-    },
-    {
-        id: 3,
-        year: 2020,
-        term: "Spring",
-    },
-];
-
-const options = getSemestersAsCascaderOptions(semesters);
-
-const initialValues = {
-    "course-code": course.code,
-    "course-name": course.name,
-    "course-detail": course.detail,
-    capacity: course.capacity,
-    "registration-time-interval": [
-        dayjs(course.enrolment_start),
-        dayjs(course.enrolment_end),
-    ],
-};
-
 function EditCourse() {
+    let { id } = useParams<{ id: string }>();
+    if (isNaN(Number(id))) return <NotFound />;
+    const {
+        loading: loadingCourse,
+        error: errorCourse,
+        data: dataCourse,
+    } = useQuery<CourseReply>(getCourse(+id));
+    const {
+        loading: loadingSemesters,
+        error: errorSemesters,
+        data: dataSemesters,
+    } = useQuery<SemestersReply>(getSemesters());
+    if (loadingCourse || loadingSemesters)
+        return (
+            <Skeleton
+                className={"detail-skeleton"}
+                active
+                paragraph={{ rows: 13 }}
+            />
+        );
+    if (errorCourse || errorSemesters) return <ServerError />;
+
+    if (
+        dataCourse?.course.length == 0 ||
+        dataCourse?.course[0] == undefined ||
+        dataSemesters?.semesters.length == 0 ||
+        dataSemesters?.semesters == undefined
+    )
+        return <NotFound />;
+
+    const course = dataCourse?.course[0];
+    const semesters = dataSemesters?.semesters;
+    const options = getSemestersAsCascaderOptions(semesters);
+
+    const initialValues = {
+        "course-code": course.code,
+        "course-name": course.name,
+        "course-detail": course.detail,
+        semester: [course.semester.year, course.semester.id],
+        capacity: course.capacity,
+        "registration-time-interval": [
+            dayjs(course.enrolment_start),
+            dayjs(course.enrolment_end),
+        ],
+    };
+
     const onFinish = (values: any) => {
         console.log("Success:", values);
     };
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
     };
+
     return (
         <>
             <h1>Edit course {course.code}</h1>

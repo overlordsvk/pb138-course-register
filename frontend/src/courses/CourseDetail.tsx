@@ -4,7 +4,11 @@ import dayjs from "dayjs";
 import "./CourseDetail.css";
 import Button from "antd/es/button";
 import { useParams } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import NotFound from "../status/NotFound";
+import { getCourse } from "../utils/queries";
+import ServerError from "../status/ServerError";
+import { CourseReply } from "../utils/gqlTypes";
 // import Loading from "../common/Loading";
 
 const teacher = false;
@@ -17,39 +21,11 @@ function confirm(e: any) {
         message.error("Something went wrong");
     }
 }
-function getCourse(id: number) {
-    return gql`
-        query CourseDetail {
-            course(where: {id: {_eq: ${id}}}) {
-              id
-              capacity
-              code
-              detail
-              enrolment_start
-              enrolment_end
-              name
-              teacher {
-                name
-              }
-              semester {
-                id
-                year
-                term
-              }
-              enrolments {
-                user {
-                  id
-                  name
-                }
-              }
-            }
-          }
-          
-    `;
-}
 
 function CourseDetail() {
     let { id } = useParams<{ id: string }>();
+    if (isNaN(Number(id))) return <NotFound />;
+
     const { loading, error, data } = useQuery<CourseReply>(getCourse(+id));
     if (loading)
         return (
@@ -59,15 +35,17 @@ function CourseDetail() {
                 paragraph={{ rows: 13 }}
             />
         );
-    if (error) return <p>Error :(</p>;
+    if (error) return <ServerError />;
 
-    const enrolledStudents = data?.course[0]!.enrolments.length!;
-    const course = data?.course[0]!;
-    console.log(data);
+    if (data?.course.length == 0 || data?.course[0] == undefined)
+        return <NotFound />;
+    const enrolledStudents = data?.course[0].enrolments.length!;
+    const course = data?.course[0];
 
     const isRegistrationEnabled =
         dayjs(course.enrolment_start) < dayjs() &&
-        dayjs() < dayjs(course.enrolment_end);
+        dayjs() < dayjs(course.enrolment_end) &&
+        enrolledStudents < course.capacity;
     return (
         <>
             <Space direction="vertical">
@@ -150,39 +128,3 @@ function CourseDetail() {
 }
 
 export default CourseDetail;
-
-export interface CourseReply {
-    course: Course[];
-}
-
-export interface Course {
-    id: number;
-    capacity: number;
-    code: string;
-    detail: string;
-    enrolment_start: string;
-    enrolment_end: string;
-    name: string;
-    teacher: Teacher;
-    semester: Semester;
-    enrolments: Enrolment[];
-}
-
-export interface Enrolment {
-    user: User;
-}
-
-export interface User {
-    id: number;
-    name: string;
-}
-
-export interface Semester {
-    id: number;
-    year: number;
-    term: string;
-}
-
-export interface Teacher {
-    name: string;
-}
