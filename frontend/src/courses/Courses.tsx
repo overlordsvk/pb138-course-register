@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Table } from "antd";
+import { ApolloClient, InMemoryCache, gql, useQuery } from "@apollo/client";
+import { number, string } from "yargs";
+import { identifier } from "@babel/types";
 
 // const query = query MyQuery {
 //     course {
@@ -15,43 +18,70 @@ import { Button, Table } from "antd";
 //     }
 //   }
 
-export function Courses() {
-    const data = {
-        data: {
-            course: [
-                {
-                    capacity: 100,
-                    detail: "Simple introduction to algorithms for dummies",
-                    name: "IB102",
-                    enrolments_aggregate: {
-                        aggregate: {
-                            count: 2,
-                        },
-                    },
-                },
-                {
-                    capacity: 20,
-                    detail: "Martin teaching C# basics.",
-                    name: "PV178",
-                    enrolments_aggregate: {
-                        aggregate: {
-                            count: 1,
-                        },
-                    },
-                },
-            ],
-        },
-    };
+interface ICourseDataCourse {
+    code: string;
+    name: string;
+    detail: string;
+    id: number;
+    capacity: number;
+    enrolments_aggregate: {
+        aggregate: {
+            count : number;
+        }
+    }
+}; 
 
-    const courses = data.data.course.map((course) => {
+interface ICourseData {
+    course : ICourseDataCourse[];
+}; 
+
+
+const client = new ApolloClient({
+    uri: "https://suited-pup-54.hasura.app/v1/graphql",
+    cache: new InMemoryCache()
+  });
+
+const TheCourses = gql`
+  query Courses {
+    course {
+        id
+        code
+        name
+        capacity
+      detail
+      enrolments_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+`;
+
+export function Courses() {
+    console.log("courses");
+    const {loading, error, data } = useQuery(TheCourses);
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :(</p>;
+
+    const CourseData:ICourseData = data;
+
+    const Courses = CourseData.course.map((course: ICourseDataCourse) => {
         return {
-            name: course.name,
-            detail: course.detail,
-            capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
+            id: course.id,
+        code: course.code,    
+        name: course.name,
+        detail: course.detail,
+        capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
         };
     });
 
     const columns = [
+        {
+            title: "Code",
+            dataIndex: "code",
+            key: "code",
+        },
         {
             title: "Name",
             dataIndex: "name",
@@ -61,6 +91,35 @@ export function Courses() {
             title: "detail",
             dataIndex: "detail",
             key: "detail",
+        },
+        {
+            title: "",
+            dataIndex: "id",
+            key: 'id',
+            render: (id: number) => {
+                const isTeacher = true;
+                const path = `course/${id}/edit`;
+                if (isTeacher) {
+                    return <Link to={path}>
+                        <Button> Edit </Button>
+                    </Link>;
+                }
+                else {
+                    return <></>
+                }
+
+            }
+        },
+        {
+            title: "",
+            dataIndex: "id",
+            key: "id",
+            render: (id: number) => {
+                const path = `course/${id}`;
+                return <Link to={path}>
+                    <Button>{"detail"}</Button>
+                </Link>
+            }
         },
         {
             title: "Capacity",
@@ -75,13 +134,7 @@ export function Courses() {
             <Link to="/course/new">
                 <Button>Create new</Button>
             </Link>
-            <Link to="/course/1/edit">
-                <Button>Edit</Button>
-            </Link>
-            <Link to="/course/1">
-                <Button>Detail</Button>
-            </Link>
-            <Table dataSource={courses} columns={columns} />
+                <Table dataSource={Courses} columns={columns} />            
         </>
     );
 }
