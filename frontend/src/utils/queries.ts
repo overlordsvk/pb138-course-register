@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_COURSE = gql`
-    query CourseDetailnew($id: Int!) {
+    query CourseDetail($id: Int!) {
         course(where: { id: { _eq: $id } }) {
             capacity
             code
@@ -57,6 +57,34 @@ export const CREATE_COURSE = gql`
                 enrolment_end: $enrolment_end
                 semester_id: $semester_id
                 teacher_id: $teacher_id
+            }
+        ) {
+            id
+        }
+    }
+`;
+
+export const UPDATE_COURSE = gql`
+    mutation UpdateCourse(
+        $id: Int!
+        $code: String!
+        $name: String!
+        $detail: String!
+        $capacity: Int!
+        $enrolment_start: timestamptz!
+        $enrolment_end: timestamptz!
+        $semester_id: Int!
+    ) {
+        update_course_by_pk(
+            pk_columns: { id: $id }
+            _set: {
+                code: $code
+                name: $name
+                detail: $detail
+                capacity: $capacity
+                enrolment_start: $enrolment_start
+                enrolment_end: $enrolment_end
+                semester_id: $semester_id
             }
         ) {
             id

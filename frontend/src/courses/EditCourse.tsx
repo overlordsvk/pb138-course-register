@@ -1,16 +1,26 @@
-import React from "react";
-import { Form, Input, Button, Cascader, InputNumber, Skeleton } from "antd";
+import React, { useState } from "react";
+import {
+    Form,
+    Input,
+    Button,
+    Cascader,
+    InputNumber,
+    Skeleton,
+    message,
+    Spin,
+} from "antd";
 import { DatePicker } from "../dateComponents";
 
 import TextArea from "antd/lib/input/TextArea";
 import dayjs from "dayjs";
 import { getSemestersAsCascaderOptions } from "../utils/helpers";
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import NotFound from "../status/NotFound";
-import { GET_COURSE, GET_SEMESTERS } from "../utils/queries";
-import { useQuery } from "@apollo/client";
+import { GET_COURSE, GET_SEMESTERS, UPDATE_COURSE } from "../utils/queries";
+import { useMutation, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import { CourseReply, SemestersReply } from "../utils/gqlTypes";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
@@ -21,7 +31,11 @@ const layout = {
 
 function EditCourse() {
     let { id } = useParams<{ id: string }>();
+    const [showLoading, setShowLoading] = useState(false);
+    const [done, setDone] = useState(false);
     if (isNaN(Number(id))) return <NotFound />;
+    const [updateCourse] = useMutation(UPDATE_COURSE);
+
     const {
         loading: loadingCourse,
         error: errorCourse,
@@ -34,6 +48,7 @@ function EditCourse() {
         error: errorSemesters,
         data: dataSemesters,
     } = useQuery<SemestersReply>(GET_SEMESTERS);
+    if (done) return <Redirect to="/courses" />;
     if (loadingCourse || loadingSemesters)
         return (
             <Skeleton
@@ -57,19 +72,35 @@ function EditCourse() {
     const options = getSemestersAsCascaderOptions(semesters);
 
     const initialValues = {
-        "course-code": course.code,
-        "course-name": course.name,
-        "course-detail": course.detail,
+        code: course.code,
+        name: course.name,
+        detail: course.detail,
         semester: [course.semester.year, course.semester.id],
         capacity: course.capacity,
-        "registration-time-interval": [
+        timeIntervals: [
             dayjs(course.enrolment_start),
             dayjs(course.enrolment_end),
         ],
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
+        setShowLoading(true);
+        await updateCourse({
+            variables: {
+                id: +id,
+                code: values.code,
+                name: values.name,
+                detail: values.detail,
+                capacity: values.capacity,
+                enrolment_start: values.timeIntervals[0],
+                enrolment_end: values.timeIntervals[1],
+                semester_id: values.semester[1],
+            },
+        });
         console.log("Success:", values);
+        setShowLoading(false);
+        message.success("Updated course");
+        setDone(true);
     };
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
@@ -78,76 +109,96 @@ function EditCourse() {
     return (
         <>
             <h1>Edit course {course.code}</h1>
-            <Form
-                {...layout}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                initialValues={initialValues}
+            <Spin
+                spinning={showLoading}
+                indicator={<LoadingOutlined style={{ fontSize: 80 }} spin />}
             >
-                <Form.Item
-                    label="Course code"
-                    name="course-code"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please input code for the course",
-                            whitespace: false,
-                        },
-                    ]}
+                <Form
+                    {...layout}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    initialValues={initialValues}
                 >
-                    <Input placeholder="Course code" />
-                </Form.Item>
-                <Form.Item
-                    label="Course name"
-                    name="course-name"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please input name for the course",
-                            whitespace: true,
-                        },
-                    ]}
-                >
-                    <Input placeholder="Course name" />
-                </Form.Item>
-                <Form.Item label="Detail" name="course-detail">
-                    <TextArea rows={4} placeholder="Detail" />
-                </Form.Item>
-                <Form.Item
-                    label="Semester"
-                    name="semester"
-                    rules={[
-                        { required: true, message: "Please select semester" },
-                    ]}
-                >
-                    <Cascader options={options} />
-                </Form.Item>
-                <Form.Item
-                    label="Capacity"
-                    name="capacity"
-                    rules={[
-                        {
-                            required: true,
-                            type: "number",
-                            min: 0,
-                            message: "Capacity must be 0 or more",
-                        },
-                    ]}
-                >
-                    <InputNumber placeholder="Capacity" />
-                </Form.Item>
-                <Form.Item
-                    label="Registration availability time"
-                    name="registration-time-interval"
-                >
-                    <RangePicker showTime />
-                </Form.Item>
-                <Form.Item label="Confirm">
-                    <Button htmlType="submit" type="primary">
-                        Create
-                    </Button>
-                </Form.Item>
-            </Form>
+                    <Form.Item
+                        label="Course code"
+                        name="code"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input code for the course",
+                                whitespace: false,
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Course code" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Course name"
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input name for the course",
+                                whitespace: true,
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Course name" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Detail"
+                        name="detail"
+                        rules={[
+                            { required: true, message: "Please select detail" },
+                        ]}
+                    >
+                        <TextArea rows={4} placeholder="Detail" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Semester"
+                        name="semester"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please select semester",
+                            },
+                        ]}
+                    >
+                        <Cascader options={options} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Capacity"
+                        name="capacity"
+                        rules={[
+                            {
+                                required: true,
+                                type: "number",
+                                min: 0,
+                                message: "Capacity must be 0 or more",
+                            },
+                        ]}
+                    >
+                        <InputNumber placeholder="Capacity" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Registration availability time"
+                        name="timeIntervals"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please select registration time",
+                            },
+                        ]}
+                    >
+                        <RangePicker showTime />
+                    </Form.Item>
+                    <Form.Item label="Confirm">
+                        <Button htmlType="submit" type="primary">
+                            Create
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Spin>
         </>
     );
 }

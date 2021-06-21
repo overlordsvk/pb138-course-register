@@ -1,5 +1,14 @@
-import React from "react";
-import { Form, Input, Button, Cascader, InputNumber, Skeleton } from "antd";
+import React, { useState } from "react";
+import {
+    Form,
+    Input,
+    Button,
+    Cascader,
+    InputNumber,
+    Skeleton,
+    Spin,
+    message,
+} from "antd";
 import { DatePicker } from "../dateComponents";
 import TextArea from "antd/lib/input/TextArea";
 import { getSemestersAsCascaderOptions } from "../utils/helpers";
@@ -10,6 +19,8 @@ import { userState } from "../state/userState";
 import { SemestersReply } from "../utils/gqlTypes";
 import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Redirect } from "react-router-dom";
 
 const { RangePicker } = DatePicker;
 
@@ -20,6 +31,8 @@ const layout = {
 
 function CreateCourse() {
     // eslint-disable-next-line no-unused-vars
+    const [showLoading, setShowLoading] = useState(false);
+    const [done, setDone] = useState(false);
     const [createCourse] = useMutation(CREATE_COURSE);
     const {
         loading: loadingSemesters,
@@ -27,6 +40,7 @@ function CreateCourse() {
         data: dataSemesters,
     } = useQuery<SemestersReply>(GET_SEMESTERS);
     const userId = useRecoilValue(userState);
+    if (done) return <Redirect to="/courses" />;
     if (loadingSemesters)
         return (
             <Skeleton
@@ -46,8 +60,9 @@ function CreateCourse() {
     const semesters = dataSemesters?.semesters;
     const options = getSemestersAsCascaderOptions(semesters);
 
-    const onFinish = (values: any) => {
-        createCourse({
+    const onFinish = async (values: any) => {
+        setShowLoading(true);
+        const createdId = await createCourse({
             variables: {
                 code: values.code,
                 name: values.name,
@@ -59,83 +74,109 @@ function CreateCourse() {
                 teacher_id: userId,
             },
         });
+
         console.log("Success:", values);
+        console.log("ID:", createdId);
+        setShowLoading(false);
+        message.success("Created course");
+        setDone(true);
     };
     const onFinishFailed = (errorInfo: any) => {
         console.log("Failed:", errorInfo);
+        message.error("Check iputs");
     };
     return (
         <>
             <h1>Create new course</h1>
-            <Form
-                {...layout}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+            <Spin
+                spinning={showLoading}
+                indicator={<LoadingOutlined style={{ fontSize: 80 }} spin />}
             >
-                <Form.Item
-                    label="Course code"
-                    name="code"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please input code for the course",
-                            whitespace: false,
-                        },
-                    ]}
+                <Form
+                    {...layout}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
                 >
-                    <Input placeholder="Course code" />
-                </Form.Item>
-                <Form.Item
-                    label="Course name"
-                    name="name"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please input name for the course",
-                            whitespace: true,
-                        },
-                    ]}
-                >
-                    <Input placeholder="Course name" />
-                </Form.Item>
-                <Form.Item label="Detail" name="detail">
-                    <TextArea rows={4} placeholder="Detail" />
-                </Form.Item>
-                <Form.Item
-                    label="Semester"
-                    name="semester"
-                    rules={[
-                        { required: true, message: "Please select semester" },
-                    ]}
-                >
-                    <Cascader options={options} />
-                </Form.Item>
-                <Form.Item
-                    label="Capacity"
-                    name="capacity"
-                    rules={[
-                        {
-                            required: true,
-                            type: "number",
-                            min: 0,
-                            message: "Capacity must be 0 or more",
-                        },
-                    ]}
-                >
-                    <InputNumber placeholder="Capacity" />
-                </Form.Item>
-                <Form.Item
-                    label="Registration availability time"
-                    name="timeIntervals"
-                >
-                    <RangePicker showTime />
-                </Form.Item>
-                <Form.Item label="Confirm">
-                    <Button htmlType="submit" type="primary">
-                        Create
-                    </Button>
-                </Form.Item>
-            </Form>
+                    <Form.Item
+                        label="Course code"
+                        name="code"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input code for the course",
+                                whitespace: false,
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Course code" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Course name"
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input name for the course",
+                                whitespace: true,
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Course name" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Detail"
+                        name="detail"
+                        rules={[
+                            { required: true, message: "Please select detail" },
+                        ]}
+                    >
+                        <TextArea rows={4} placeholder="Detail" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Semester"
+                        name="semester"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please select semester",
+                            },
+                        ]}
+                    >
+                        <Cascader options={options} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Capacity"
+                        name="capacity"
+                        rules={[
+                            {
+                                required: true,
+                                type: "number",
+                                min: 0,
+                                message: "Capacity must be 0 or more",
+                            },
+                        ]}
+                    >
+                        <InputNumber placeholder="Capacity" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Registration availability time"
+                        name="timeIntervals"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please select registration time",
+                            },
+                        ]}
+                    >
+                        <RangePicker showTime />
+                    </Form.Item>
+                    <Form.Item label="Confirm">
+                        <Button htmlType="submit" type="primary">
+                            Create
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Spin>
         </>
     );
 }
