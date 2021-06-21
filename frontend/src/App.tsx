@@ -26,9 +26,8 @@ export default function App() {
 
     useEffect(() => {
         if (data && data.users[0]) {
-            console.log(data.users[0].role);
-            const u = { id: appUser.id, name: appUser.name, role: data.users[0].role, email: appUser.email, picture: appUser.picture };
-            setUserState(u);
+            const tmpUser = { id: appUser.id, name: appUser.name, role: data.users[0].role, email: appUser.email, picture: appUser.picture };
+            setUserState(tmpUser);
         }
     }, [data]);
 
