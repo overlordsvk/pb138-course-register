@@ -7,23 +7,24 @@ import { Link } from "react-router-dom";
 import { MY_COURSES } from "../utils/queries";
 import ServerError from "../status/ServerError";
 
-interface myCourse{
+interface myCourse {
     course: {
-        id : string,
+        id: string,
         code: string,
         name: string,
-    }}
+    }
+}
 
-interface myCourses{
+interface myCourses {
     enrolment: myCourse[],
 }
 
 
 function MyCourses() {
 
-    const myId = useRecoilValue(userState);
+    const appUser = useRecoilValue(userState);
     const { data, error, loading } = useQuery<myCourses>(MY_COURSES, {
-        variables: {id :myId}
+        variables: { id: appUser.id }
     });
     if (loading)
         return (
@@ -39,7 +40,7 @@ function MyCourses() {
     console.log(data);
     if (data?.enrolment.length == 0 || data?.enrolment[0] == undefined)
         return <h1> No courses found </h1>;
-        
+
     const dataSource = data.enrolment.map((enrolment: myCourse) => {
         return {
             id: enrolment.course.id,
@@ -63,11 +64,11 @@ function MyCourses() {
             title: "",
             dataIndex: "id",
             key: "id",
-            render: (id : number) => {
+            render: (id: number) => {
                 const path = `course/${id}`;
                 return (<Link to={path}>
                     <Button> Details </Button>
-                </Link>);                
+                </Link>);
             }
         },
     ];

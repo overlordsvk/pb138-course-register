@@ -39,7 +39,7 @@ function CreateCourse() {
         error: errorSemesters,
         data: dataSemesters,
     } = useQuery<SemestersReply>(GET_SEMESTERS);
-    const userId = useRecoilValue(userState);
+    const appUser = useRecoilValue(userState);
     if (done) return <Redirect to="/courses" />;
     if (loadingSemesters)
         return (
@@ -71,7 +71,7 @@ function CreateCourse() {
                 enrolment_start: values.timeIntervals[0],
                 enrolment_end: values.timeIntervals[1],
                 semester_id: values.semester[1],
-                teacher_id: userId,
+                teacher_id: appUser.id,
             },
         });
 

@@ -9,14 +9,23 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { useAuth0 } from "@auth0/auth0-react";
 import { hasuraUrl } from "../utils/constants";
+import { useRecoilState } from "recoil";
+import { userState } from "../state/userState";
 
 const ApolloProviderWithAuth0 = ({ children }: any) => {
-    const { getAccessTokenSilently } = useAuth0();
-
+    const { user, getAccessTokenSilently } = useAuth0();
+    const [appUser, setUserState] = useRecoilState(userState);
     const httpLink = new HttpLink({
         uri: hasuraUrl,
     });
 
+    React.useEffect(() => {
+        if (user) {
+            const tmpUser = { id: user.sub ?? "", name: user.name ?? "", role: appUser.role ?? "", email: user.email ?? "", picture: user.picture ?? "" };
+            setUserState(tmpUser);
+        }
+    }, [user]);
+ 
     const authLink = setContext(async (_, { headers, ...rest }) => {
         let token;
         try {
@@ -26,7 +35,6 @@ const ApolloProviderWithAuth0 = ({ children }: any) => {
         }
 
         if (!token) return { headers, ...rest };
-
         return {
             ...rest,
             headers: {
