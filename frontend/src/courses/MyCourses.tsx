@@ -1,50 +1,75 @@
-import { Table } from "antd";
+import { Table, Button, Skeleton } from "antd";
 import React from "react";
+import { useQuery } from "@apollo/client";
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
+import { Link } from "react-router-dom";
+import { MY_COURSES } from "../utils/queries";
+import NotFound from "../status/NotFound";
+import ServerError from "../status/ServerError";
+
+interface myCourse{
+    course: {
+        id : string,
+        code: string,
+        name: string,
+    }}
+
+interface myCourses{
+    enrolment: myCourse[],
+}
+
 
 function MyCourses() {
 
-    // query MyQuery {
-    //     enrolment(where: {user_id: {_eq: 2}}) {
-    //       course {
-    //         name
-    //         detail
-    //       }
-    //     }
-    //   }
-      
-    const data = {
-        "data": {
-            "enrolment": [
-                {
-                    "course": {
-                        "name": "IB102",
-                        "detail": "Simple introduction to algorithms for dummies"
-                    }
-                },
-                {
-                    "course": {
-                        "name": "PV178",
-                        "detail": "Martin teaching C# basics."
-                    }
-                }
-            ]
-        }
-    };
+    const myId = useRecoilValue(userState);
+    const { data, error, loading } = useQuery<myCourses>(MY_COURSES, {
+        variables: {id :myId}
+    });
+    if (loading)
+        return (
+            <Skeleton
+                className={"detail-skeleton"}
+                active
+                paragraph={{ rows: 13 }}
+            />
+        );
+    console.log("error");
+    console.log(error);
+    if (error) return <ServerError />;
 
-    const dataSource = data.data.enrolment.map((course) => {return {
-        "name" : course.course.name,
-        "detail": course.course.detail,
-    };});
+    if (data?.enrolment.length == 0 || data?.enrolment[0] == undefined)
+        return <NotFound />;
+        
+    const dataSource = data.enrolment.map((enrolment: myCourse) => {
+        return {
+            id: enrolment.course.id,
+            code: enrolment.course.code,
+            name: enrolment.course.name,
+        };
+    });
+
     const columns = [
+        {
+            title: "Code",
+            dataIndex: "code",
+            key: "code",
+        },
         {
             title: "Name",
             dataIndex: "name",
             key: "name",
         },
         {
-            title: "detail",
-            dataIndex: "detail",
-            key: "detail",
+            title: "",
+            dataIndex: "id",
+            key: "id",
+            render: (id : number) => {
+                const path = `course/${id}`;
+                return (<Link to={path}>
+                    <Button> Details </Button>
+                </Link>);                
+            }
         },
     ];
 
