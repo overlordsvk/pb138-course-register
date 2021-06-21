@@ -24,7 +24,6 @@ export interface Enrolment {
 }
 
 export interface User {
-    id: number;
     name: string;
 }
 
