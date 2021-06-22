@@ -8,9 +8,13 @@ Authors (name, UČO):
 
 
 Technologies:
-  - React
+  - React (Typescript)
+  - Apollo Client
+  - Recoil
   - Node.js
-  - Prisma
-  - PostgreSQL
+  - Hasura (Cloud)
+  - Auth0 (SPA)
+  - PostgreSQL (Heroku Cloud)
   - HTML5
   - CSS3
+  - Ant.design (React UI)
