@@ -142,3 +142,17 @@ export const GET_COURSE_STUDENTS = gql`
         }
     }  
 `;
+
+export const GET_STUDENT = gql`
+    query Student($id: String!) {
+        users(where: {auth0_id: {_eq: $id}}) {
+            auth0_id
+            created_at
+            email
+            last_seen
+            name
+            role
+            picture
+        }
+    }
+`;
