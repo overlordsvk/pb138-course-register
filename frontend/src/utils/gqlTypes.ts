@@ -51,3 +51,20 @@ export interface Role {
 export interface UserRole {
     users: User[];
 }
+
+export interface CourseEnrollments {
+    name: string;
+    enrolments: EnrolledStudent[];
+}
+
+export interface EnrolledStudent {
+    user: {
+        id: string;
+        name: string;
+        email: string;
+    }
+}
+
+export interface CourseStudents {
+    course: CourseEnrollments[];
+}

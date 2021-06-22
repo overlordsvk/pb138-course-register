@@ -127,3 +127,18 @@ export const DELETE_ENROLMENT = gql`
         }
     }
 `;
+
+export const GET_COURSE_STUDENTS = gql`
+    query CourseStudents($id: String!) {
+        course(where: {id: {_eq: $id}}) {
+            name
+            enrolments(where: {user: {role: {_eq: student}}}) {
+                user {
+                    auth0_id
+                    name
+                    email
+                }
+            }
+        }
+    }  
+`;

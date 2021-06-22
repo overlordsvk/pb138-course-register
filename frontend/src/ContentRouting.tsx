@@ -7,6 +7,7 @@ import { Courses } from "./courses/Courses";
 import CreateCourse from "./courses/CreateCourse";
 import EditCourse from "./courses/EditCourse";
 import MyCourses from "./courses/MyCourses";
+import MyCourseStudents from "./courses/MyCourseStudents";
 import Home from "./Home";
 import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
@@ -29,6 +30,9 @@ function ContentRouting() {
                 </ProtectedRoute>
                 <ProtectedRoute path="/course/:id/edit">
                     <EditCourse />
+                </ProtectedRoute>
+                <ProtectedRoute path="/course/:id/students">
+                    <MyCourseStudents />
                 </ProtectedRoute>
                 <ProtectedRoute path="/course/:id">
                     <CourseDetail />
