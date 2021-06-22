@@ -24,7 +24,7 @@ import {
 } from "../utils/queries";
 import ServerError from "../status/ServerError";
 import { CourseReply } from "../utils/gqlTypes";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { LoadingOutlined } from "@ant-design/icons";
 import { refetchTrigger } from "../state/atoms";
@@ -36,7 +36,7 @@ function CourseDetail() {
     const [done, setDone] = useState(false);
     const teacher = useRecoilValue(userState).role == "teacher";
     const appUser = useRecoilValue(userState);
-    const refetchNow = useRecoilValue(refetchTrigger);
+    const [refetchNow, setRefetchNow] = useRecoilState(refetchTrigger);
     const { loading, error, data, refetch } = useQuery<CourseReply>(
         GET_COURSE,
         {
@@ -47,7 +47,11 @@ function CourseDetail() {
     const [deleteEnrolment] = useMutation(DELETE_ENROLMENT);
 
     useEffect(() => {
-        refetch();
+        let mounted = true;
+        if (mounted) refetch();
+        return () => {
+            mounted = false;
+        };
     }, [refetchNow]);
 
     if (isNaN(Number(id))) return <NotFound />;
@@ -80,7 +84,7 @@ function CourseDetail() {
             variables: { id: +id, user_id: appUser.id },
         });
         setShowLoading(false);
-
+        setRefetchNow(!refetchNow);
         message.success("You have succesfuly enrolled in " + course.code);
         setDone(true);
     }
@@ -92,7 +96,7 @@ function CourseDetail() {
             variables: { course_id: +id, user_id: appUser.id },
         });
         setShowLoading(false);
-
+        setRefetchNow(!refetchNow);
         message.success("You have succesfuly unrolled from " + course.code);
         setDone(true);
     }
@@ -177,7 +181,7 @@ function CourseDetail() {
                         >
                             <Button
                                 type="primary"
-                                disabled={!isRegistrationEnabled}
+                                disabled={!isRegistrationEnabled || isFull}
                             >
                                 Register
                             </Button>

@@ -53,7 +53,11 @@ function EditCourse() {
     } = useQuery<SemestersReply>(GET_SEMESTERS);
 
     useEffect(() => {
-        refetch();
+        let mounted = true;
+        if (mounted) refetch();
+        return () => {
+            mounted = false;
+        };
     }, [refetchNow]);
 
     if (isNaN(Number(id))) return <NotFound />;

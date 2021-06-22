@@ -30,7 +30,11 @@ function MyCourses() {
     });
 
     useEffect(() => {
-        refetch();
+        let mounted = true;
+        if (mounted) refetch();
+        return () => {
+            mounted = false;
+        };
     }, [refetchNow]);
 
     if (loading)
@@ -42,7 +46,7 @@ function MyCourses() {
             />
         );
     if (error) return <ServerError />;
-    
+
     if (data?.enrolment.length == 0 || data?.enrolment[0] == undefined)
         return <h1> No courses found </h1>;
 

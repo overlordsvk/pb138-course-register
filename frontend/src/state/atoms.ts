@@ -11,6 +11,6 @@ export const refetchTrigger = atom({
 });
 
 export const studentState = atom({
-    key: "userState", 
-    default: {id: "", name: "", role: "", email:"", picture:""}, 
+    key: "studentState",
+    default: { id: "", name: "", role: "", email: "", picture: "" },
 });
