@@ -152,7 +152,6 @@ export const GET_STUDENT = gql`
             last_seen
             name
             role
-            picture
         }
     }
 `;

@@ -40,7 +40,7 @@ export enum UserRole {
     admin = "admin"
 }
 
-const isStudent = () => {
+export const isStudent = () => {
     const user = useRecoilValue(userState);
     return user.role.includes(UserRole.student);
 };
@@ -55,5 +55,19 @@ export const isAdmin = () => {
     return user.role.includes(UserRole.admin);
 };
 
+export const formatDate = (date: string) => {
+    const newDate = new Date(date);
+    let options: Intl.DateTimeFormatOptions = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    };
+
+    return newDate.toLocaleDateString("en-US", options);
+};
+
+
 export type { Semester };
-export default isStudent;

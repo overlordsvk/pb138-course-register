@@ -6,8 +6,8 @@ import { userState } from "../state/userState";
 import { Link } from "react-router-dom";
 import { MY_COURSES } from "../utils/queries";
 import ServerError from "../status/ServerError";
-import isStudent from "../utils/helpers";
 import { refetchTrigger } from "../state/atoms";
+import { isStudent } from "../utils/helpers";
 
 interface myCourse {
     course: {
