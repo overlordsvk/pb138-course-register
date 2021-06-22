@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { Semester } from "./gqlTypes";
 
-// eslint-disable-next-line no-unused-vars
 const groupBy = <T, K extends keyof T>(array: T[], key: K) => {
     let map = new Map<T[K], T[]>();
     array.forEach((item) => {
@@ -17,7 +17,7 @@ const groupBy = <T, K extends keyof T>(array: T[], key: K) => {
     return map;
 };
 
-const getSemestersAsCascaderOptions = (array: Semester[]) => {
+export const getSemestersAsCascaderOptions = (array: Semester[]) => {
     const grouppedSemesters = groupBy(array, "year");
     let options: any[] = [];
     grouppedSemesters.forEach((year) => {
@@ -34,11 +34,26 @@ const getSemestersAsCascaderOptions = (array: Semester[]) => {
     return options;
 };
 
+export enum UserRole {
+    student = "student",
+    teacher = "teacher",
+    admin = "admin"
+}
+
 const isStudent = () => {
     const user = useRecoilValue(userState);
-    return user.role.includes("student");
+    return user.role.includes(UserRole.student);
+};
+
+export const isTeacher = () => {
+    const user = useRecoilValue(userState);
+    return user.role.includes(UserRole.teacher);
+};
+
+export const isAdmin = () => {
+    const user = useRecoilValue(userState);
+    return user.role.includes(UserRole.admin);
 };
 
 export type { Semester };
-export { getSemestersAsCascaderOptions };
 export default isStudent;

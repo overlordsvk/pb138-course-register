@@ -29,6 +29,7 @@ function Profile() {
             <h3>From recoil</h3>
             <p>{appUser.id}</p>
             <p>{appUser.role}</p>
+            <p>{ }</p>
             <h3>User Metadata</h3>
             {userMetadata ? (
                 <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
