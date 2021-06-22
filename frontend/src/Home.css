@@ -1,0 +1,26 @@
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .tile__image {
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    .tile__image {
+        padding: 30px;
+        font-size: 3rem;
+        border: 2px solid black;
+        border-radius: 50%;
+    }
+}
+
+.tile__image,
+.tile__text {
+    margin: auto;
+}
