@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import Loading from "../common/Loading";
 import { userState } from "../state/userState";
 
 interface IProtectedRouteProps {
@@ -11,9 +12,11 @@ interface IProtectedRouteProps {
 
 const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, role = "student", ...rest }) => {
     const appUser = useRecoilValue(userState);
-    let isAuthorized = role.includes(appUser.role);
-    if (appUser.role == "")
-        isAuthorized = false;
+    const isAuthorized = role.includes(appUser.role);
+    if (appUser.role == "") {
+        return <Loading />;
+    }
+    console.log(isAuthorized);
     return (
         <Route
             {...rest}

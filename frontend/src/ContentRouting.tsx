@@ -43,8 +43,6 @@ function ContentRouting() {
                 <ProtectedRoute path="/course/:id" role={UserRole.student + UserRole.teacher}>
                     <CourseDetail />
                 </ProtectedRoute>
-
-
                 <Route exact path="/">
                     <Home />
                 </Route>
