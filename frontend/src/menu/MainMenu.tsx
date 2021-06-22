@@ -34,9 +34,6 @@ function MainMenu() {
                         <Menu.Item key="profile" className="menu-item">
                             <Link to="/profile">Profile</Link>
                         </Menu.Item>
-                        <Menu.Item key="/test-courses" className="menu-item">
-                            <Link to="/test-courses">Test courses</Link>
-                        </Menu.Item>
                     </>
                 ) : (
                     <></>
