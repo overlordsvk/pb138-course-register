@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button, Skeleton, Table } from "antd";
 import { gql, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
 import isStudent from "../utils/helpers";
+import { useRecoilValue } from "recoil";
+import { refetchTrigger } from "../state/atoms";
 
 interface allCourses {
     code: string;
@@ -42,7 +44,14 @@ const TheCourses = gql`
 
 export function Courses() {
     const isTeacher = !isStudent();
-    const { loading, error, data } = useQuery<allCoursesReply>(TheCourses);
+    const refetchNow = useRecoilValue(refetchTrigger);
+    const { loading, error, data, refetch } =
+        useQuery<allCoursesReply>(TheCourses);
+
+    useEffect(() => {
+        refetch();
+    }, [refetchNow]);
+
     if (loading)
         return (
             <Skeleton
@@ -117,7 +126,7 @@ export function Courses() {
     ];
 
     if (!isTeacher) {
-        columns.splice(4, 1);
+        columns.splice(2, 1);
     }
 
     return (

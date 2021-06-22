@@ -13,14 +13,19 @@ import { DatePicker } from "../dateComponents";
 import TextArea from "antd/lib/input/TextArea";
 import { getSemestersAsCascaderOptions } from "../utils/helpers";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COURSE, GET_SEMESTERS } from "../utils/queries";
-import { useRecoilValue } from "recoil";
+import {
+    CREATE_COURSE,
+    CREATE_ENROLMENT,
+    GET_SEMESTERS,
+} from "../utils/queries";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { SemestersReply } from "../utils/gqlTypes";
 import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Redirect } from "react-router-dom";
+import { refetchTrigger } from "../state/atoms";
 
 const { RangePicker } = DatePicker;
 
@@ -34,6 +39,9 @@ function CreateCourse() {
     const [showLoading, setShowLoading] = useState(false);
     const [done, setDone] = useState(false);
     const [createCourse] = useMutation(CREATE_COURSE);
+    const [createEnrollment] = useMutation(CREATE_ENROLMENT);
+    const [refetchNow, setRefetchNow] = useRecoilState(refetchTrigger);
+
     const {
         loading: loadingSemesters,
         error: errorSemesters,
@@ -62,7 +70,7 @@ function CreateCourse() {
 
     const onFinish = async (values: any) => {
         setShowLoading(true);
-        await createCourse({
+        const courseId = await createCourse({
             variables: {
                 code: values.code,
                 name: values.name,
@@ -74,7 +82,14 @@ function CreateCourse() {
                 teacher_id: appUser.id,
             },
         });
-
+        console.log(courseId);
+        await createEnrollment({
+            variables: {
+                id: courseId.data.insert_course_one.id,
+                user_id: appUser.id,
+            },
+        });
+        setRefetchNow(!refetchNow);
         setShowLoading(false);
         message.success("Created course");
         setDone(true);
