@@ -1,17 +1,16 @@
 import { useQuery } from "@apollo/client";
 import { Table } from "antd";
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
 import Loading from "../common/Loading";
-import { userState } from "../state/userState";
 import ServerError from "../status/ServerError";
 import { CourseStudents, EnrolledStudent } from "../utils/gqlTypes";
 import { GET_COURSE_STUDENTS } from "../utils/queries";
 
 function MyCourseStudents() {
-    const appUser = useRecoilValue(userState);
+    let { id } = useParams<{ id: string }>();
     const { data, error, loading } = useQuery<CourseStudents>(GET_COURSE_STUDENTS, {
-        variables: { id: appUser.id }
+        variables: { id: +id}
     });
 
     if (loading)
@@ -21,7 +20,7 @@ function MyCourseStudents() {
 
     if (error || !data) return <ServerError />;
 
-    const dataSource = data?.course[0].enrolments
+    const dataSource = data.course[0].enrolments
         .map((e: EnrolledStudent) => {
             return {
                 id: e.user.id,

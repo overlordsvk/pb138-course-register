@@ -118,7 +118,7 @@ export function Courses() {
             },
         },
         {
-            title: "Capacity",
+            title: "Enrolled",
             dataIndex: "capacity",
             key: "capacity",
             width: 20,

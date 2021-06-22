@@ -74,7 +74,7 @@ function MyCourses() {
             key: "id-myStudents",
             width: 20,
             render: (id: number) => {
-                const path = `course/${id}/myStudents`;
+                const path = `/course/${id}/students`;
                 if (!isTeacher) return <></>;
                 return (
                     <Link to={path}>
@@ -89,7 +89,7 @@ function MyCourses() {
             key: "id-detail",
             width: 20,
             render: (id: number) => {
-                const path = `course/${id}`;
+                const path = `/course/${id}`;
                 return (
                     <Link to={path}>
                         <Button> Details </Button>
