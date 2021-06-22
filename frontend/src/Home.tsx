@@ -1,4 +1,4 @@
-import { SolutionOutlined, UnorderedListOutlined, RobotOutlined, PoweroffOutlined, UserOutlined } from "@ant-design/icons";
+import { SolutionOutlined, UnorderedListOutlined, RobotOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -12,11 +12,11 @@ function Home() {
     const { logout } = useAuth0();
     const resetUserState = useResetRecoilState(userState);
 
-    return  <Card>
+    return <Card>
         <Card.Grid>
             <Link to="/mycourses">
                 <div className="tile">
-                    <SolutionOutlined className="tile__image"/>
+                    <SolutionOutlined className="tile__image" />
                     <span className="tile__text">my courses</span>
                 </div>
             </Link>
@@ -24,7 +24,7 @@ function Home() {
         <Card.Grid>
             <Link to="/courses">
                 <div className="tile">
-                    <UnorderedListOutlined className="tile__image"/>
+                    <UnorderedListOutlined className="tile__image" />
                     <span className="tile__text">Course List</span>
                 </div>
             </Link>
@@ -32,7 +32,7 @@ function Home() {
         <Card.Grid>
             <Link to="/profile">
                 <div className="tile">
-                    <RobotOutlined className="tile__image"/>
+                    <RobotOutlined className="tile__image" />
                     <span className="tile__text">Profile</span>
                 </div>
             </Link>
@@ -40,7 +40,7 @@ function Home() {
         <Card.Grid>
             <a onClick={() => { logout({ returnTo: window.location.origin }); resetUserState; }}>
                 <div className="tile">
-                    <PoweroffOutlined className="tile__image"/>
+                    <PoweroffOutlined className="tile__image" />
                     <span className="tile__text">Log Out</span>
                 </div>
             </a>
