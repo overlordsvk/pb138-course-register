@@ -41,10 +41,7 @@ function MyCourses() {
                 paragraph={{ rows: 13 }}
             />
         );
-    console.log("error");
-    console.log(error);
     if (error) return <ServerError />;
-    console.log(data);
     if (data?.enrolment.length == 0 || data?.enrolment[0] == undefined)
         return <h1> No courses found </h1>;
 

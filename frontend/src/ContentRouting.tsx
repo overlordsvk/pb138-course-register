@@ -12,34 +12,37 @@ import Home from "./Home";
 import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
 import Users from "./Users";
+import { UserRole } from "./utils/helpers";
 
 function ContentRouting() {
     return (
         <div className="site-layout-content">
             <Switch>
-                <ProtectedRoute path="/mycourses">
+                <ProtectedRoute path="/mycourses" role={UserRole.student + UserRole.teacher}>
                     <MyCourses />
                 </ProtectedRoute>
-                <ProtectedRoute path="/courses">
+                <ProtectedRoute path="/courses" role={UserRole.student + UserRole.teacher}>
                     <Courses />
                 </ProtectedRoute>
-                <ProtectedRoute path="/profile">
+                <ProtectedRoute path="/profile" role={UserRole.student + UserRole.teacher + UserRole.admin}>
                     <Profile />
                 </ProtectedRoute>
-                <ProtectedRoute path="/course/new">
+                <ProtectedRoute path="/course/new" role={UserRole.teacher}>
                     <CreateCourse />
                 </ProtectedRoute>
-                <ProtectedRoute path="/course/:id/edit">
+                <ProtectedRoute path="/course/:id/edit" role={UserRole.teacher}>
                     <EditCourse />
                 </ProtectedRoute>
-                <ProtectedRoute path="/course/:id/students">
+                <ProtectedRoute path="/course/:id/students" role={UserRole.student + UserRole.teacher}>
                     <MyCourseStudents />
                 </ProtectedRoute>
-                <ProtectedRoute path="/course/:id">
+                <ProtectedRoute path="/course/:id" role={UserRole.student + UserRole.teacher}>
                     <CourseDetail />
                 </ProtectedRoute>
-                <ProtectedRoute path="/userslist">
+                <ProtectedRoute path="/userslist" role={UserRole.admin}>
                     <Users />
+                <ProtectedRoute path="/semesters" role={UserRole.admin}>
+                    <></>
                 </ProtectedRoute>
                 <Route exact path="/">
                     <Home />

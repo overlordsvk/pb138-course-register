@@ -1,35 +1,28 @@
 import React from "react";
-import { Route, Redirect, RouteProps } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Route, Redirect } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userState } from "../state/userState";
-import { useQuery } from "@apollo/client";
-import { GET_USER_ROLE } from "../utils/queries";
-import { UserRole } from "../utils/gqlTypes";
 import Loading from "../common/Loading";
+import { userState } from "../state/userState";
 
+interface IProtectedRouteProps {
+    path: string;
+    role: string;
+    [key: string]: any
+}
 
-const ProtectedRoute: React.FC<RouteProps> = ({ path, children, ...rest }) => {
-    const { isAuthenticated } = useAuth0();
+const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, role = "student", ...rest }) => {
     const appUser = useRecoilValue(userState);
-    const { loading, data } = useQuery<UserRole>(GET_USER_ROLE, {
-        variables: { id: appUser.id },
-    });
-
-    if (loading)
-        return (
-            <Loading />
-        );
-    const isTeacher = data?.users[0].role === "teacher";
+    const isAuthorized = role.includes(appUser.role);
+    if (appUser.role == "") {
+        return <Loading />;
+    }
     return (
         <Route
             {...rest}
             render={() => {
-                if (!isAuthenticated || (!isTeacher &&
-                    (path?.includes("new") || path?.includes("edit") || path?.includes("students")))) {
+                if (!isAuthorized) {
                     return <Redirect to="/unauthorized" />;
                 }
-
                 return children;
             }}
         />
