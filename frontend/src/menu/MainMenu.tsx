@@ -1,12 +1,10 @@
 import React from "react";
 import { Menu } from "antd";
-import { CalendarOutlined, RobotOutlined, SolutionOutlined, UnorderedListOutlined, UserOutlined } from "@ant-design/icons";
-import "./MainMenu.css";
+import { CalendarOutlined, PoweroffOutlined, RobotOutlined, SolutionOutlined, UnorderedListOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import AuthenticationButton from "../auth/AuthenticationButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import { isAdmin } from "../utils/helpers";
-
 
 function MainMenu() {
     const { isAuthenticated } = useAuth0();
@@ -58,7 +56,7 @@ function MainMenu() {
                 {isAuthenticated ? <Menu.Item key="profile" className="menu-item" icon={<RobotOutlined />}>
                     <Link to="/profile">Profile</Link>
                 </Menu.Item> : <></>}
-                <Menu.Item key="logout" className="menu-logout">
+                <Menu.Item key="logout" className="menu-logout" icon={<PoweroffOutlined />}>
                     <AuthenticationButton />
                 </Menu.Item>
             </Menu>
