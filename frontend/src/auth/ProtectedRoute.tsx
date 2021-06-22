@@ -26,7 +26,7 @@ const ProtectedRoute: React.FC<RouteProps> = ({ path, children, ...rest }) => {
             {...rest}
             render={() => {
                 if (!isAuthenticated || (!isTeacher &&
-                    path?.includes("new") || path?.includes("edit"))) {
+                    (path?.includes("new") || path?.includes("edit")))) {
                     return <Redirect to="/unauthorized" />;
                 }
 
