@@ -16,7 +16,6 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, role = "stud
     if (appUser.role == "") {
         return <Loading />;
     }
-    console.log(isAuthorized);
     return (
         <Route
             {...rest}

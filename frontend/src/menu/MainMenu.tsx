@@ -41,7 +41,7 @@ function MainMenu() {
                 key="/semesters"
                 icon={<CalendarOutlined />}
             >
-                <Link to="/semester">Semesters</Link>
+                <Link to="/semesters">Semesters</Link>
             </Menu.Item>
         </>;
     }

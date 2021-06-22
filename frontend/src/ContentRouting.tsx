@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { Semesters } from "./admin/semester/Semesters";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Profile from "./common/Profile";
 import CourseDetail from "./courses/CourseDetail";
@@ -12,12 +13,7 @@ import Home from "./Home";
 import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
 import { UserRole } from "./utils/helpers";
-/* <ProtectedRoute path="/users" role={UserRole.student + UserRole.teacher}>
-                    <Users />
-                </ProtectedRoute>
-                <ProtectedRoute path="/semesters" role={UserRole.student + UserRole.teacher}>
-                    <Semesters />
-                </ProtectedRoute>*/
+
 function ContentRouting() {
     return (
         <div className="site-layout-content">
@@ -42,6 +38,9 @@ function ContentRouting() {
                 </ProtectedRoute>
                 <ProtectedRoute path="/course/:id" role={UserRole.student + UserRole.teacher}>
                     <CourseDetail />
+                </ProtectedRoute>
+                <ProtectedRoute path="/semesters" role={UserRole.admin}>
+                    <Semesters />
                 </ProtectedRoute>
                 <Route exact path="/">
                     <Home />
