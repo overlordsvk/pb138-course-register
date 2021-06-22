@@ -24,7 +24,7 @@ export default function App() {
     });
 
     useEffect(() => {
-        if (data && data.users[0]) {
+        if (appUser.id != "" && data && data.users[0]) {
             const tmpUser = { id: appUser.id, name: appUser.name, role: data.users[0].role, email: appUser.email, picture: appUser.picture };
             setUserState(tmpUser);
         }
@@ -33,7 +33,7 @@ export default function App() {
     if (isLoading || loading) {
         return loadingLayout;
     }
-    if (error) return <ServerError />;
+    if (error && appUser.id != "") return <ServerError />;
 
     return (
         <Router>
