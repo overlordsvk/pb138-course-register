@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Form,
     Input,
@@ -21,6 +21,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import { CourseReply, SemestersReply } from "../utils/gqlTypes";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useRecoilState } from "recoil";
+import { refetchTrigger } from "../state/atoms";
 
 const { RangePicker } = DatePicker;
 
@@ -33,13 +35,14 @@ function EditCourse() {
     let { id } = useParams<{ id: string }>();
     const [showLoading, setShowLoading] = useState(false);
     const [done, setDone] = useState(false);
-    if (isNaN(Number(id))) return <NotFound />;
     const [updateCourse] = useMutation(UPDATE_COURSE);
+    const [refetchNow, setRefetchNow] = useRecoilState(refetchTrigger);
 
     const {
         loading: loadingCourse,
         error: errorCourse,
         data: dataCourse,
+        refetch,
     } = useQuery<CourseReply>(GET_COURSE, {
         variables: { id: +id },
     });
@@ -48,7 +51,13 @@ function EditCourse() {
         error: errorSemesters,
         data: dataSemesters,
     } = useQuery<SemestersReply>(GET_SEMESTERS);
-    if (done) return <Redirect to="/courses" />;
+
+    useEffect(() => {
+        refetch();
+    }, [refetchNow]);
+
+    if (isNaN(Number(id))) return <NotFound />;
+    if (done) return <Redirect to={`/course/${id}`} />;
     if (loadingCourse || loadingSemesters)
         return (
             <Skeleton
@@ -97,6 +106,7 @@ function EditCourse() {
                 semester_id: values.semester[1],
             },
         });
+        setRefetchNow(!refetchNow);
         setShowLoading(false);
         message.success("Updated course");
         setDone(true);
