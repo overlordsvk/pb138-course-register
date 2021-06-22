@@ -4,6 +4,7 @@ import { Button, Skeleton, Table } from "antd";
 import { gql, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
+import isStudent from "../utils/helpers";
 
 interface allCourses {
     code: string;
@@ -24,23 +25,25 @@ interface allCoursesReply {
 
 
 const TheCourses = gql`
-  query Courses {
+query Courses {
     course {
-        id
-        code
-        name
-        capacity
+      id
+      code
+      name
+      capacity
       detail
-      enrolments_aggregate {
+      enrolments_aggregate(where: {user: {role: {_eq: student}}}) {
         aggregate {
           count
         }
       }
     }
   }
+  
 `;
 
 export function Courses() {
+    const isTeacher = !isStudent();
     const { loading, error, data } = useQuery<allCoursesReply>(TheCourses);
     if (loading)
         return (
@@ -78,16 +81,11 @@ export function Courses() {
             key: "name",
         },
         {
-            title: "detail",
-            dataIndex: "detail",
-            key: "detail",
-        },
-        {
             title: "",
             dataIndex: "id",
             key: "id",
+            width: 20,
             render: (id: number) => {
-                const isTeacher = true;
                 const path = `course/${id}/edit`;
                 if (!isTeacher)
                     return <></>;
@@ -102,6 +100,7 @@ export function Courses() {
             title: "",
             dataIndex: "id",
             key: "id",
+            width:20,
             render: (id: number) => {
                 const path = `course/${id}`;
                 return <Link to={path}>
@@ -113,6 +112,7 @@ export function Courses() {
             title: "Capacity",
             dataIndex: "capacity",
             key: "capacity",
+            width:20,
         },
     ];
 

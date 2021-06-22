@@ -6,6 +6,7 @@ import { userState } from "../state/userState";
 import { Link } from "react-router-dom";
 import { MY_COURSES } from "../utils/queries";
 import ServerError from "../status/ServerError";
+import isStudent from "../utils/helpers";
 
 interface myCourse {
     course: {
@@ -21,7 +22,7 @@ interface myCourses {
 
 
 function MyCourses() {
-
+    const isTeacher = !isStudent();
     const appUser = useRecoilValue(userState);
     const { data, error, loading } = useQuery<myCourses>(MY_COURSES, {
         variables: { id: appUser.id }
@@ -64,6 +65,21 @@ function MyCourses() {
             title: "",
             dataIndex: "id",
             key: "id",
+            width:20,
+            render: (id: number) => {
+                const path = `course/${id}/myStudents`;
+                if (!isTeacher)
+                    return <></>;
+                return (<Link to={path}>
+                    <Button> My Students </Button>
+                </Link>);
+            }
+        },
+        {
+            title: "",
+            dataIndex: "id",
+            key: "id",
+            width:20,
             render: (id: number) => {
                 const path = `course/${id}`;
                 return (<Link to={path}>
