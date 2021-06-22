@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { Semesters } from "./admin/semester/Semesters";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Profile from "./common/Profile";
 import CourseDetail from "./courses/CourseDetail";
@@ -40,7 +39,7 @@ function ContentRouting() {
                     <CourseDetail />
                 </ProtectedRoute>
                 <ProtectedRoute path="/semesters" role={UserRole.admin}>
-                    <Semesters />
+                    <></>
                 </ProtectedRoute>
                 <Route exact path="/">
                     <Home />
