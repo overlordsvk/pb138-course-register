@@ -11,7 +11,7 @@ import MyCourseStudents from "./courses/MyCourseStudents";
 import Home from "./Home";
 import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
-import Users from "./Users";
+import Users from "./admin/user/Users";
 import { UserRole } from "./utils/helpers";
 
 function ContentRouting() {
@@ -54,7 +54,7 @@ function ContentRouting() {
                 >
                     <CourseDetail />
                 </ProtectedRoute>
-                <ProtectedRoute path="/userslist" role={UserRole.admin}>
+                <ProtectedRoute path="/users" role={UserRole.admin}>
                     <Users />
                 </ProtectedRoute>
                 <ProtectedRoute path="/semesters" role={UserRole.admin}>

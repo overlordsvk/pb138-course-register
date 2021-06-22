@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button, Form, Radio, Spin, Table, Tag } from "antd";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_USERS } from "./utils/queries";
-import Loading from "./common/Loading";
-import ServerError from "./status/ServerError";
+import { GET_ALL_USERS } from "../../utils/queries";
+import Loading from "../../common/Loading";
+import ServerError from "../../status/ServerError";
 import { LoadingOutlined } from "@ant-design/icons";
-import { User } from "./utils/gqlTypes";
+import { User } from "../../utils/gqlTypes";
 
 function Users() {
     const { loading, error, data, refetch } =
@@ -55,8 +55,8 @@ function Users() {
                         role.includes("admin")
                             ? "volcano"
                             : role.includes("teacher")
-                            ? "green"
-                            : "blue"
+                                ? "green"
+                                : "blue"
                     }
                 >
                     {role.toUpperCase()}
@@ -71,7 +71,6 @@ function Users() {
                     onFinish={changeRole}
                     initialValues={{ key: item.key, role: item.role }}
                 >
-                    <Form.Item hidden name="key"></Form.Item>
                     <Form.Item
                         style={{
                             marginBottom: "0",
