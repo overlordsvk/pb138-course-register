@@ -11,6 +11,7 @@ import MyCourseStudents from "./courses/MyCourseStudents";
 import Home from "./Home";
 import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
+import Users from "./Users";
 
 function ContentRouting() {
     return (
@@ -36,6 +37,9 @@ function ContentRouting() {
                 </ProtectedRoute>
                 <ProtectedRoute path="/course/:id">
                     <CourseDetail />
+                </ProtectedRoute>
+                <ProtectedRoute path="/userslist">
+                    <Users />
                 </ProtectedRoute>
                 <Route exact path="/">
                     <Home />
