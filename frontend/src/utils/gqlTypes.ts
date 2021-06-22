@@ -35,6 +35,7 @@ export interface User {
     email: string;
     created_at: string;
     auth0_id: string;
+    picture: string;
 }
 
 export interface Semester {
@@ -51,6 +52,10 @@ export interface UserRole {
     users: User[];
 }
 
+export interface Users {
+    users: User[];
+}
+
 export interface CourseEnrollments {
     name: string;
     enrolments: EnrolledStudent[];
@@ -58,7 +63,7 @@ export interface CourseEnrollments {
 
 export interface EnrolledStudent {
     user: {
-        id: string;
+        auth0_id: string;
         name: string;
         email: string;
     }

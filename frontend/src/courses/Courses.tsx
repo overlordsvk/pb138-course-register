@@ -4,9 +4,9 @@ import { Button, Skeleton, Table } from "antd";
 import { gql, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
-import isStudent from "../utils/helpers";
 import { useRecoilValue } from "recoil";
 import { refetchTrigger } from "../state/atoms";
+import { isStudent } from "../utils/helpers";
 
 interface allCourses {
     code: string;
