@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loading from "../common/Loading";
 import ServerError from "../status/ServerError";
 import { CourseStudents, EnrolledStudent } from "../utils/gqlTypes";
@@ -10,26 +10,25 @@ import { GET_COURSE_STUDENTS } from "../utils/queries";
 function MyCourseStudents() {
     let { id } = useParams<{ id: string }>();
     const { data, error, loading } = useQuery<CourseStudents>(GET_COURSE_STUDENTS, {
-        variables: { id: +id}
+        variables: { id: +id }
     });
 
     if (loading)
         return (<Loading />);
 
-    console.log(`error \n${error}`);
-
-    if (error || !data) return <ServerError />;
-
+    if (error || !data) {
+        return <ServerError />;
+    }
+    
     const dataSource = data.course[0].enrolments
         .map((e: EnrolledStudent) => {
             return {
-                id: e.user.id,
+                id: e.user.auth0_id,
                 name: e.user.name,
                 email: e.user.email,
-                key: e.user.id
+                key: e.user.auth0_id,
             };
         });
-
     let columns = [
         {
             title: "Name",
@@ -40,6 +39,20 @@ function MyCourseStudents() {
             title: "email",
             dataIndex: "email",
             key: "email",
+        },
+        {
+            title: "",
+            dataIndex: "id",
+            key: "id-detail",
+            width: 20,
+            render: (id: string) => {
+                const path = `/student/${id}`;
+                return (
+                    <Link to={path}>
+                        <Button> Details </Button>
+                    </Link>
+                );
+            },
         },
     ];
 
