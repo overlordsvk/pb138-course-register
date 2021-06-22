@@ -145,11 +145,70 @@ export const GET_COURSE_STUDENTS = gql`
 
 export const GET_ALL_USERS = gql`
     query getUsers {
-        users {
+        users(order_by: {auth0_id: asc}) {
             auth0_id
             name
             email
             role
         }
     }
+`;
+
+export const UPDATE_USER_ROLE = gql`mutation UpdateUserRole($id: String!, $role: role_enum!) {
+    update_users_by_pk(pk_columns: {auth0_id: $id}, _set: {role: $role}) {
+      auth0_id
+    }
+  }`;
+
+export const SEMESTER_LIST_QUERY = gql`
+  query Semesters {
+      semesters {
+          id
+          year
+          term
+      }
+  }
+`;
+
+export const SEMESTER_UPDATE = gql`
+    mutation UpdateCourse(
+        $id: Int!
+        $term: String!
+        $year: Int!
+    ) {
+        update_semesters_by_pk(
+            pk_columns: { id: $id }
+            _set: {
+                term: $term
+                year: $year
+            }
+        ) {
+            id
+        }
+    }
+`;
+
+export const SEMESTER_GET = gql`
+    query Semester($id: Int!) {
+    semesters(where: {id: {_eq: $id}}) {
+      id
+      term
+      year
+    }
+  }`;
+
+export const SEMESTER_CREATE = gql`
+  mutation SemesterCreate(
+      $term: String!
+      $year: Int!
+  ) {
+      insert_semesters_one(
+          object: {
+              term: $term
+              year: $year
+          }
+      ) {
+          id
+      }
+  }
 `;

@@ -39,7 +39,6 @@ export interface User {
 
 export interface Semester {
     id: number;
-    name: string;
     term: string;
     year: number;
 }

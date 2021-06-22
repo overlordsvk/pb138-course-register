@@ -171,8 +171,8 @@ function CourseDetail() {
                                 !isRegistrationEnabled
                                     ? "Registration is not available now!"
                                     : isFull
-                                    ? "Course is full"
-                                    : ""
+                                        ? "Course is full"
+                                        : ""
                             }
                         >
                             <Button

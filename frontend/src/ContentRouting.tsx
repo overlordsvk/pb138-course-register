@@ -12,7 +12,10 @@ import Home from "./Home";
 import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
 import Users from "./admin/user/Users";
+import Semesters from "./admin/semester/Semesters";
 import { UserRole } from "./utils/helpers";
+import SemesterEdit from "./admin/semester/SemesterEdit";
+import SemesterCreate from "./admin/semester/SemesterCreate";
 
 function ContentRouting() {
     return (
@@ -57,8 +60,14 @@ function ContentRouting() {
                 <ProtectedRoute path="/users" role={UserRole.admin}>
                     <Users />
                 </ProtectedRoute>
+                <ProtectedRoute path="/semester/new" role={UserRole.admin}>
+                    <SemesterCreate />
+                </ProtectedRoute>
+                <ProtectedRoute path="/semester/:id/edit" role={UserRole.admin}>
+                    <SemesterEdit />
+                </ProtectedRoute>
                 <ProtectedRoute path="/semesters" role={UserRole.admin}>
-                    <></>
+                    <Semesters />
                 </ProtectedRoute>
                 <Route exact path="/">
                     <Home />
