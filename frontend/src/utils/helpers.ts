@@ -1,3 +1,5 @@
+import { useRecoilValue } from "recoil";
+import { userState } from "../state/userState";
 import { Semester } from "./gqlTypes";
 
 // eslint-disable-next-line no-unused-vars
@@ -32,5 +34,11 @@ const getSemestersAsCascaderOptions = (array: Semester[]) => {
     return options;
 };
 
+const isStudent = () => {
+    const user = useRecoilValue(userState);
+    return user.role.includes("student");
+};
+
 export type { Semester };
 export { getSemestersAsCascaderOptions };
+export default isStudent;
