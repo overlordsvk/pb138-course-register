@@ -2,7 +2,6 @@ import { SolutionOutlined, UnorderedListOutlined, RobotOutlined, PoweroffOutline
 import { Card } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
-import AuthenticationButton from "./auth/AuthenticationButton";
 import "./Home.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useResetRecoilState } from "recoil";
