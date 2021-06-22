@@ -15,31 +15,29 @@ interface allCourses {
     enrolments_aggregate: {
         aggregate: {
             count: number;
-        }
-    }
+        };
+    };
 }
 
 interface allCoursesReply {
     course: allCourses[];
 }
 
-
 const TheCourses = gql`
-query Courses {
-    course {
-      id
-      code
-      name
-      capacity
-      detail
-      enrolments_aggregate(where: {user: {role: {_eq: student}}}) {
-        aggregate {
-          count
+    query Courses {
+        course {
+            id
+            code
+            name
+            capacity
+            detail
+            enrolments_aggregate(where: { user: { role: { _eq: student } } }) {
+                aggregate {
+                    count
+                }
+            }
         }
-      }
     }
-  }
-  
 `;
 
 export function Courses() {
@@ -88,43 +86,51 @@ export function Courses() {
             width: 20,
             render: (id: number) => {
                 const path = `course/${id}/edit`;
-                if (!isTeacher)
-                    return <></>;
-                return <Link to={path}>
-                    <Button> Edit </Button>
-                </Link>;
-            }
+                if (!isTeacher) return <></>;
+                return (
+                    <Link to={path}>
+                        <Button> Edit </Button>
+                    </Link>
+                );
+            },
         },
         {
             title: "",
             dataIndex: "id",
             key: "id",
-            width:20,
+            width: 20,
             render: (id: number) => {
                 const path = `course/${id}`;
-                return <Link to={path}>
-                    <Button>{"detail"}</Button>
-                </Link>;
-            }
+                return (
+                    <Link to={path}>
+                        <Button>{"detail"}</Button>
+                    </Link>
+                );
+            },
         },
         {
             title: "Capacity",
             dataIndex: "capacity",
             key: "capacity",
-            width:20,
+            width: 20,
         },
     ];
 
     if (!isTeacher) {
-        columns.splice(2,1);
+        columns.splice(4, 1);
     }
 
     return (
         <>
             <h1> Courses</h1>
-            <Link to="/course/new">
-                <Button>Create new</Button>
-            </Link>
+            {isTeacher && (
+                <Link to="/course/new">
+                    <Button style={{ marginBottom: "1em" }} type="primary">
+                        Create new
+                    </Button>
+                </Link>
+            )}
+
             <Table dataSource={Courses} columns={columns} />
         </>
     );

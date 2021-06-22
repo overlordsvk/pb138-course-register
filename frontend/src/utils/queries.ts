@@ -17,7 +17,8 @@ export const GET_COURSE = gql`
                 year
                 term
             }
-            enrolments {
+            enrolments(where: { user: { role: { _eq: student } } }) {
+                user_id
                 user {
                     name
                 }
@@ -115,6 +116,14 @@ export const CREATE_ENROLMENT = gql`
     mutation CreateEnrolment($id: Int!, $user_id: String!) {
         insert_enrolment_one(object: { course_id: $id, user_id: $user_id }) {
             course_id
+        }
+    }
+`;
+
+export const DELETE_ENROLMENT = gql`
+    mutation UrollFromCourse($course_id: Int!, $user_id: String!) {
+        delete_enrolment_by_pk(course_id: $course_id, user_id: $user_id) {
+            __typename
         }
     }
 `;

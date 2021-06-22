@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React, { useState } from "react";
 import {
     Alert,
@@ -15,29 +17,32 @@ import Button from "antd/es/button";
 import { Redirect, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import NotFound from "../status/NotFound";
-import { CREATE_ENROLMENT, GET_COURSE } from "../utils/queries";
+import {
+    CREATE_ENROLMENT,
+    DELETE_ENROLMENT,
+    GET_COURSE,
+} from "../utils/queries";
 import ServerError from "../status/ServerError";
 import { CourseReply } from "../utils/gqlTypes";
 import { useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { LoadingOutlined } from "@ant-design/icons";
 
-const teacher = false;
-
 function CourseDetail() {
-    const [showLoading, setShowLoading] = useState(false);
-    const [done, setDone] = useState(false);
-
     let { id } = useParams<{ id: string }>();
     if (isNaN(Number(id))) return <NotFound />;
-    const appUser = useRecoilValue(userState);
 
+    const [showLoading, setShowLoading] = useState(false);
+    const [done, setDone] = useState(false);
+    const teacher = useRecoilValue(userState).role == "teacher";
+    const appUser = useRecoilValue(userState);
     const { loading, error, data } = useQuery<CourseReply>(GET_COURSE, {
         variables: { id: +id },
     });
     const [createEnrolment] = useMutation(CREATE_ENROLMENT);
+    const [deleteEnrolment] = useMutation(DELETE_ENROLMENT);
 
-    if (done) return <Redirect to="/courses" />;
+    if (done) return <Redirect to="/mycourses" />;
     if (loading)
         return (
             <Skeleton
@@ -52,15 +57,14 @@ function CourseDetail() {
         return <NotFound />;
     const course = data?.course[0];
     const enrolledStudents = course.enrolments.length!;
+    const isFull = enrolledStudents >= course.capacity;
     const isAlreadyEnrolled =
-        course.enrolments.find((e) => e.user_id == appUser.id) == undefined;
-
+        course.enrolments.find((e) => e.user_id == appUser.id) != undefined;
     const isRegistrationEnabled =
         dayjs(course.enrolment_start) < dayjs() &&
-        dayjs() < dayjs(course.enrolment_end) &&
-        enrolledStudents < course.capacity;
+        dayjs() < dayjs(course.enrolment_end);
 
-    async function confirm() {
+    async function enroll() {
         setShowLoading(true);
 
         await createEnrolment({
@@ -71,6 +75,19 @@ function CourseDetail() {
         message.success("You have succesfuly enrolled in " + course.code);
         setDone(true);
     }
+
+    async function unroll() {
+        setShowLoading(true);
+
+        await deleteEnrolment({
+            variables: { course_id: +id, user_id: appUser.id },
+        });
+        setShowLoading(false);
+
+        message.success("You have succesfuly unrolled from " + course.code);
+        setDone(true);
+    }
+
     return (
         <Spin
             spinning={showLoading}
@@ -122,32 +139,31 @@ function CourseDetail() {
                     </p>
                 </div>
 
-                {/*TODO: if already registered show unregister choice*/}
-
-                {isAlreadyEnrolled ? (
+                {isAlreadyEnrolled && !teacher && (
                     <Alert
                         message="You are enroled in this course!"
                         type="info"
                     />
-                ) : (
-                    <></>
                 )}
-                {teacher || isAlreadyEnrolled ? (
+
+                {teacher ? (
                     <></>
-                ) : (
+                ) : !isAlreadyEnrolled ? (
                     <Popconfirm
-                        disabled={!isRegistrationEnabled}
+                        disabled={!isRegistrationEnabled || isFull}
                         title="Are you sure you want to register this course?"
-                        onConfirm={confirm}
+                        onConfirm={enroll}
                         placement="right"
                         okText="Yes"
                         cancelText="No"
                     >
                         <Tooltip
                             title={
-                                isRegistrationEnabled
-                                    ? ""
-                                    : "Registration is not available now!"
+                                !isRegistrationEnabled
+                                    ? "Registration is not available now!"
+                                    : isFull
+                                    ? "Course is full"
+                                    : ""
                             }
                         >
                             <Button
@@ -155,6 +171,30 @@ function CourseDetail() {
                                 disabled={!isRegistrationEnabled}
                             >
                                 Register
+                            </Button>
+                        </Tooltip>
+                    </Popconfirm>
+                ) : (
+                    <Popconfirm
+                        disabled={!isRegistrationEnabled}
+                        title="Are you sure you want to unroll from this course?"
+                        onConfirm={unroll}
+                        placement="right"
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Tooltip
+                            title={
+                                !isRegistrationEnabled
+                                    ? "Registration is not available now!"
+                                    : ""
+                            }
+                        >
+                            <Button
+                                type="primary"
+                                disabled={!isRegistrationEnabled}
+                            >
+                                Unroll
                             </Button>
                         </Tooltip>
                     </Popconfirm>

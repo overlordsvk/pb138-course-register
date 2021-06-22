@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Profile from "./common/Profile";
-import TestCourses from "./common/TestCourses";
 import CourseDetail from "./courses/CourseDetail";
 import { Courses } from "./courses/Courses";
 import CreateCourse from "./courses/CreateCourse";
@@ -13,7 +12,6 @@ import NotFound from "./status/NotFound";
 import Unauthorized from "./status/Unauthorized";
 
 function ContentRouting() {
-
     return (
         <div className="site-layout-content">
             <Switch>
@@ -22,9 +20,6 @@ function ContentRouting() {
                 </ProtectedRoute>
                 <ProtectedRoute path="/courses">
                     <Courses />
-                </ProtectedRoute>
-                <ProtectedRoute path="/test-courses">
-                    <TestCourses />
                 </ProtectedRoute>
                 <ProtectedRoute path="/profile">
                     <Profile />
