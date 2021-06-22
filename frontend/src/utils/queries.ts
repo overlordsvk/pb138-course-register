@@ -130,9 +130,9 @@ export const DELETE_ENROLMENT = gql`
 
 export const GET_COURSE_STUDENTS = gql`
     query CourseStudents($id: Int!) {
-        course(where: {id: {_eq: $id}}) {
+        course(where: { id: { _eq: $id } }) {
             name
-            enrolments(where: {user: {role: {_eq: student}}}) {
+            enrolments(where: { user: { role: { _eq: student } } }) {
                 user {
                     auth0_id
                     name
@@ -151,6 +151,18 @@ export const GET_STUDENT = gql`
             email
             last_seen
             name
+            role
+        }
+    }
+`;
+
+
+export const GET_ALL_USERS = gql`
+    query getUsers {
+        users {
+            auth0_id
+            name
+            email
             role
         }
     }
