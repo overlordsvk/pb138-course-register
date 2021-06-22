@@ -1,7 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
 import { SolutionOutlined, UnorderedListOutlined } from "@ant-design/icons";
-import "./MainMenu.css";
 import { Link, useLocation } from "react-router-dom";
 import AuthenticationButton from "../auth/AuthenticationButton";
 import { useAuth0 } from "@auth0/auth0-react";
