@@ -203,7 +203,7 @@ function EditCourse() {
                     </Form.Item>
                     <Form.Item label="Confirm">
                         <Button htmlType="submit" type="primary">
-                            Create
+                            Update
                         </Button>
                     </Form.Item>
                 </Form>
