@@ -47,10 +47,11 @@ function MyCourses() {
             id: enrolment.course.id,
             code: enrolment.course.code,
             name: enrolment.course.name,
+            key: enrolment.course.id,
         };
     });
 
-    const columns = [
+    let columns = [
         {
             title: "Code",
             dataIndex: "code",
@@ -64,7 +65,7 @@ function MyCourses() {
         {
             title: "",
             dataIndex: "id",
-            key: "id",
+            key: "id-myStudents",
             width:20,
             render: (id: number) => {
                 const path = `course/${id}/myStudents`;
@@ -78,7 +79,7 @@ function MyCourses() {
         {
             title: "",
             dataIndex: "id",
-            key: "id",
+            key: "id-detail",
             width:20,
             render: (id: number) => {
                 const path = `course/${id}`;
@@ -88,6 +89,10 @@ function MyCourses() {
             }
         },
     ];
+
+    if (!isTeacher) {
+        columns.splice(2,1);
+    }
 
     return (
         <>

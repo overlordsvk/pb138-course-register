@@ -66,10 +66,11 @@ export function Courses() {
             name: course.name,
             detail: course.detail,
             capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
+            key: course.id,
         };
     });
 
-    const columns = [
+    let columns = [
         {
             title: "Code",
             dataIndex: "code",
@@ -92,8 +93,6 @@ export function Courses() {
                 return <Link to={path}>
                     <Button> Edit </Button>
                 </Link>;
-
-
             }
         },
         {
@@ -115,6 +114,10 @@ export function Courses() {
             width:20,
         },
     ];
+
+    if (!isTeacher) {
+        columns.splice(2,1);
+    }
 
     return (
         <>
