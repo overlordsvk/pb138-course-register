@@ -1,5 +1,5 @@
 import { Table, Button, Skeleton } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
@@ -7,26 +7,32 @@ import { Link } from "react-router-dom";
 import { MY_COURSES } from "../utils/queries";
 import ServerError from "../status/ServerError";
 import isStudent from "../utils/helpers";
+import { refetchTrigger } from "../state/atoms";
 
 interface myCourse {
     course: {
-        id: string,
-        code: string,
-        name: string,
-    }
+        id: string;
+        code: string;
+        name: string;
+    };
 }
 
 interface myCourses {
-    enrolment: myCourse[],
+    enrolment: myCourse[];
 }
-
 
 function MyCourses() {
     const isTeacher = !isStudent();
     const appUser = useRecoilValue(userState);
-    const { data, error, loading } = useQuery<myCourses>(MY_COURSES, {
-        variables: { id: appUser.id }
+    const refetchNow = useRecoilValue(refetchTrigger);
+    const { data, error, loading, refetch } = useQuery<myCourses>(MY_COURSES, {
+        variables: { id: appUser.id },
     });
+
+    useEffect(() => {
+        refetch();
+    }, [refetchNow]);
+
     if (loading)
         return (
             <Skeleton
@@ -66,32 +72,35 @@ function MyCourses() {
             title: "",
             dataIndex: "id",
             key: "id-myStudents",
-            width:20,
+            width: 20,
             render: (id: number) => {
-                const path = `course/${id}/myStudents`;
-                if (!isTeacher)
-                    return <></>;
-                return (<Link to={path}>
-                    <Button> My Students </Button>
-                </Link>);
-            }
+                const path = `/course/${id}/students`;
+                if (!isTeacher) return <></>;
+                return (
+                    <Link to={path}>
+                        <Button> My Students </Button>
+                    </Link>
+                );
+            },
         },
         {
             title: "",
             dataIndex: "id",
             key: "id-detail",
-            width:20,
+            width: 20,
             render: (id: number) => {
-                const path = `course/${id}`;
-                return (<Link to={path}>
-                    <Button> Details </Button>
-                </Link>);
-            }
+                const path = `/course/${id}`;
+                return (
+                    <Link to={path}>
+                        <Button> Details </Button>
+                    </Link>
+                );
+            },
         },
     ];
 
     if (!isTeacher) {
-        columns.splice(2,1);
+        columns.splice(2, 1);
     }
 
     return (

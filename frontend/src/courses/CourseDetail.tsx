@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Alert,
     message,
@@ -27,21 +27,30 @@ import { CourseReply } from "../utils/gqlTypes";
 import { useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { LoadingOutlined } from "@ant-design/icons";
+import { refetchTrigger } from "../state/atoms";
 
 function CourseDetail() {
     let { id } = useParams<{ id: string }>();
-    if (isNaN(Number(id))) return <NotFound />;
 
     const [showLoading, setShowLoading] = useState(false);
     const [done, setDone] = useState(false);
     const teacher = useRecoilValue(userState).role == "teacher";
     const appUser = useRecoilValue(userState);
-    const { loading, error, data } = useQuery<CourseReply>(GET_COURSE, {
-        variables: { id: +id },
-    });
+    const refetchNow = useRecoilValue(refetchTrigger);
+    const { loading, error, data, refetch } = useQuery<CourseReply>(
+        GET_COURSE,
+        {
+            variables: { id: +id },
+        }
+    );
     const [createEnrolment] = useMutation(CREATE_ENROLMENT);
     const [deleteEnrolment] = useMutation(DELETE_ENROLMENT);
 
+    useEffect(() => {
+        refetch();
+    }, [refetchNow]);
+
+    if (isNaN(Number(id))) return <NotFound />;
     if (done) return <Redirect to="/mycourses" />;
     if (loading)
         return (
