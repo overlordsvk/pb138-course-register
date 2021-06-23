@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { MY_COURSES } from "../utils/queries";
 import ServerError from "../status/ServerError";
 import { refetchTrigger } from "../state/atoms";
-import { isStudent } from "../utils/helpers";
+import { isTeacher } from "../utils/helpers";
 
 interface myCourse {
     course: {
@@ -22,7 +22,7 @@ interface myCourses {
 }
 
 function MyCourses() {
-    const isTeacher = !isStudent();
+    const Teacher = isTeacher();
     const appUser = useRecoilValue(userState);
     const refetchNow = useRecoilValue(refetchTrigger);
     const { data, error, loading, refetch } = useQuery<myCourses>(MY_COURSES, {
@@ -77,7 +77,7 @@ function MyCourses() {
             width: 20,
             render: (id: number) => {
                 const path = `/course/${id}/students`;
-                if (!isTeacher) return <></>;
+                if (!Teacher) return <></>;
                 return (
                     <Link to={path}>
                         <Button> My Students </Button>
@@ -101,7 +101,7 @@ function MyCourses() {
         },
     ];
 
-    if (!isTeacher) {
+    if (!Teacher) {
         columns.splice(2, 1);
     }
 
