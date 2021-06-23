@@ -13,9 +13,23 @@ import { useResetRecoilState } from "recoil";
 import { userState } from "./state/userState";
 
 function Home() {
-    const { logout } = useAuth0();
+    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
     const resetUserState = useResetRecoilState(userState);
 
+    if (!isAuthenticated) {
+        return <Card className="grid-wrap">
+            <a
+                onClick={() => {
+                    loginWithRedirect();
+                }}
+            >
+                <div className="tile">
+                    <PoweroffOutlined className="tile__image" />
+                    <h4 className="tile__text">Log In</h4>
+                </div>
+            </a>
+        </Card>;
+    }
     return (
         <Card className="grid-wrap">
             <Card.Grid className="card-tile">
