@@ -6,7 +6,7 @@ import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
 import { useRecoilValue } from "recoil";
 import { refetchTrigger } from "../state/atoms";
-import { isStudent } from "../utils/helpers";
+import { isTeacher } from "../utils/helpers";
 
 interface allCourses {
     code: string;
@@ -43,7 +43,7 @@ const TheCourses = gql`
 `;
 
 export function Courses() {
-    const isTeacher = !isStudent();
+    const Teacher = isTeacher();
     const refetchNow = useRecoilValue(refetchTrigger);
     const { loading, error, data, refetch } =
         useQuery<allCoursesReply>(TheCourses);
@@ -110,14 +110,14 @@ export function Courses() {
         },
     ];
 
-    if (!isTeacher) {
+    if (!Teacher) {
         columns.splice(2, 1);
     }
 
     return (
         <>
             <h1> Courses</h1>
-            {isTeacher && (
+            {Teacher && (
                 <Link to="/course/new">
                     <Button style={{ marginBottom: "1em" }} type="primary">
                         Create new
