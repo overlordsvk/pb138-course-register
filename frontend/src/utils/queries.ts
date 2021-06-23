@@ -11,6 +11,7 @@ export const GET_COURSE = gql`
             name
             teacher {
                 name
+                auth0_id
             }
             semester {
                 id
@@ -21,6 +22,7 @@ export const GET_COURSE = gql`
                 user_id
                 user {
                     name
+                    role
                 }
             }
         }

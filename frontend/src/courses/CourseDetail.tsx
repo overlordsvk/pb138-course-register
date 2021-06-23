@@ -14,7 +14,7 @@ import {
 import dayjs from "dayjs";
 import "./CourseDetail.css";
 import Button from "antd/es/button";
-import { Redirect, useParams } from "react-router-dom";
+import { Link, Redirect, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import NotFound from "../status/NotFound";
 import {
@@ -28,13 +28,14 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../state/userState";
 import { LoadingOutlined } from "@ant-design/icons";
 import { refetchTrigger } from "../state/atoms";
+import { isTeacher } from "../utils/helpers";
 
 function CourseDetail() {
     let { id } = useParams<{ id: string }>();
 
     const [showLoading, setShowLoading] = useState(false);
     const [done, setDone] = useState(false);
-    const teacher = useRecoilValue(userState).role == "teacher";
+    const teacher = isTeacher();
     const appUser = useRecoilValue(userState);
     const [refetchNow, setRefetchNow] = useRecoilState(refetchTrigger);
     const { loading, error, data, refetch } = useQuery<CourseReply>(
@@ -45,6 +46,8 @@ function CourseDetail() {
     );
     const [createEnrolment] = useMutation(CREATE_ENROLMENT);
     const [deleteEnrolment] = useMutation(DELETE_ENROLMENT);
+
+    const path = `/course/${id}/edit`;
 
     useEffect(() => {
         let mounted = true;
@@ -69,7 +72,7 @@ function CourseDetail() {
     if (data?.course.length == 0 || data?.course[0] == undefined)
         return <NotFound />;
     const course = data?.course[0];
-    const enrolledStudents = course.enrolments.length!;
+    const enrolledStudents = course.enrolments.filter((enrolment) => {return enrolment.user.role == "student";}).length!;
     const isFull = enrolledStudents >= course.capacity;
     const isAlreadyEnrolled =
         course.enrolments.find((e) => e.user_id == appUser.id) != undefined;
@@ -101,11 +104,14 @@ function CourseDetail() {
         setDone(true);
     }
 
+    console.log(course.teacher.auth0_id);
+    console.log(appUser.id);
     return (
         <Spin
             spinning={showLoading}
             indicator={<LoadingOutlined style={{ fontSize: 80 }} spin />}
         >
+            
             <Space direction="vertical">
                 <div>
                     <h1>{`${course.code}: ${course.name}`}</h1>
@@ -160,7 +166,15 @@ function CourseDetail() {
                 )}
 
                 {teacher ? (
-                    <></>
+                    appUser.id == course.teacher.auth0_id ? (
+                        
+                        <Link to={path}>
+                            <Button style={{ marginBottom: "1em" }} type="primary">
+                                edit
+                            </Button>
+                        </Link>
+                    ) :
+                        <></>
                 ) : !isAlreadyEnrolled ? (
                     <Popconfirm
                         disabled={!isRegistrationEnabled || isFull}

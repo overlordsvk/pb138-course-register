@@ -94,21 +94,6 @@ export function Courses() {
             key: "id",
             width: 20,
             render: (id: number) => {
-                const path = `course/${id}/edit`;
-                if (!isTeacher) return <></>;
-                return (
-                    <Link to={path}>
-                        <Button> Edit </Button>
-                    </Link>
-                );
-            },
-        },
-        {
-            title: "",
-            dataIndex: "id",
-            key: "id",
-            width: 20,
-            render: (id: number) => {
                 const path = `course/${id}`;
                 return (
                     <Link to={path}>
