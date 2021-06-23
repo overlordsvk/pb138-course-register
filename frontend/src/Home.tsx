@@ -17,20 +17,18 @@ function Home() {
     const resetUserState = useResetRecoilState(userState);
 
     if (!isAuthenticated) {
-        return <a
-            onClick={() => {
-                loginWithRedirect();
-            }}
-        >
-            <Card className="grid-wrap">
-            
+        return <Card className="grid-wrap">
+            <a
+                onClick={() => {
+                    loginWithRedirect();
+                }}
+            >
                 <div className="tile">
                     <PoweroffOutlined className="tile__image" />
                     <h4 className="tile__text">Log In</h4>
                 </div>
-            
-            </Card>
-        </a>;
+            </a>
+        </Card>;
     }
     return (
         <Card className="grid-wrap">
