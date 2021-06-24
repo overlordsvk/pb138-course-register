@@ -55,9 +55,9 @@ export default function App() {
 function Logo() {
     return (
         <div className="logo">
-            <h1 className="logo-text">
+            <h3 className="logo-text">
                 <Link to="/">Courses Registration</Link>
-            </h1>
+            </h3>
         </div>
     );
 }
