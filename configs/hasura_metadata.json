@@ -1,0 +1,506 @@
+{
+  "resource_version": 117,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "schema": "public",
+              "name": "course"
+            },
+            "object_relationships": [
+              {
+                "name": "semester",
+                "using": {
+                  "foreign_key_constraint_on": "semester_id"
+                }
+              },
+              {
+                "name": "teacher",
+                "using": {
+                  "foreign_key_constraint_on": "teacher_id"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "enrolments",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "course_id",
+                    "table": {
+                      "schema": "public",
+                      "name": "enrolment"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "capacity",
+                    "id",
+                    "semester_id",
+                    "teacher_id",
+                    "code",
+                    "detail",
+                    "name",
+                    "enrolment_end",
+                    "enrolment_start"
+                  ],
+                  "backend_only": false
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "id",
+                    "code",
+                    "detail",
+                    "capacity",
+                    "enrolment_start",
+                    "enrolment_end",
+                    "semester_id",
+                    "name",
+                    "teacher_id"
+                  ],
+                  "backend_only": false
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "capacity",
+                    "id",
+                    "semester_id",
+                    "teacher_id",
+                    "code",
+                    "detail",
+                    "name",
+                    "enrolment_end",
+                    "enrolment_start"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "capacity",
+                    "id",
+                    "semester_id",
+                    "code",
+                    "detail",
+                    "name",
+                    "teacher_id",
+                    "enrolment_end",
+                    "enrolment_start"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "code",
+                    "detail",
+                    "capacity",
+                    "enrolment_start",
+                    "enrolment_end",
+                    "semester_id",
+                    "name",
+                    "teacher_id"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "capacity",
+                    "id",
+                    "semester_id",
+                    "code",
+                    "detail",
+                    "name",
+                    "teacher_id",
+                    "enrolment_end",
+                    "enrolment_start"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "teacher",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "enrolment"
+            },
+            "object_relationships": [
+              {
+                "name": "course",
+                "using": {
+                  "foreign_key_constraint_on": "course_id"
+                }
+              },
+              {
+                "name": "user",
+                "using": {
+                  "foreign_key_constraint_on": "user_id"
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "user_id",
+                    "course_id",
+                    "enroled_at"
+                  ],
+                  "backend_only": false
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "user_id",
+                    "course_id",
+                    "enroled_at"
+                  ],
+                  "backend_only": false
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "course_id",
+                    "user_id",
+                    "enroled_at"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "course_id",
+                    "user_id",
+                    "enroled_at"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "course_id",
+                    "user_id",
+                    "enroled_at"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "filter": {}
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "online_users"
+            },
+            "select_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "last_seen",
+                    "name"
+                  ],
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "role"
+            },
+            "is_enum": true
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "semesters"
+            },
+            "array_relationships": [
+              {
+                "name": "courses",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "semester_id",
+                    "table": {
+                      "schema": "public",
+                      "name": "course"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "teacher",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "id",
+                    "year",
+                    "term"
+                  ],
+                  "backend_only": false
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "year",
+                    "term"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "year",
+                    "term"
+                  ],
+                  "filter": {}
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "year",
+                    "term"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "teacher",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "schema": "public",
+              "name": "users"
+            },
+            "insert_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "check": {
+                    "auth0_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "columns": [
+                    "email",
+                    "last_seen",
+                    "name"
+                  ],
+                  "backend_only": false
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "name",
+                    "email",
+                    "role",
+                    "auth0_id",
+                    "created_at",
+                    "last_seen"
+                  ],
+                  "backend_only": false
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "auth0_id",
+                    "created_at",
+                    "email",
+                    "last_seen",
+                    "name",
+                    "picture",
+                    "role"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "auth0_id",
+                    "created_at",
+                    "email",
+                    "last_seen",
+                    "name",
+                    "picture",
+                    "role"
+                  ],
+                  "filter": {}
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "student",
+                "permission": {
+                  "columns": [
+                    "email",
+                    "last_seen",
+                    "name"
+                  ],
+                  "filter": {
+                    "auth0_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "check": {
+                    "auth0_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                }
+              },
+              {
+                "role": "teacher",
+                "permission": {
+                  "columns": [
+                    "auth0_id",
+                    "email",
+                    "name",
+                    "role",
+                    "created_at",
+                    "last_seen"
+                  ],
+                  "filter": {},
+                  "check": {}
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "teacher",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "use_prepared_statements": false,
+            "database_url": {
+              "from_env": "HEROKU_DATABASE_URL"
+            },
+            "isolation_level": "read-committed"
+          }
+        }
+      }
+    ],
+    "metrics_config": {
+      "analyze_query_variables": false,
+      "analyze_response_body": true
+    }
+  }
+}
