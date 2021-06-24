@@ -1,16 +1,31 @@
 .progressbar {
     width: 20em;
-    margin-left: 1em;
 }
 
-@media (max-width: 470px) {
+.registrations {
+    margin-right: 1em;
+}
+
+@media (max-width: 600px) {
     .progressbar {
-        width: 60%;
+        width: 50%;
     }
 }
 
 @media (min-width: 1000px) {
     .detail-skeleton {
         width: 50%;
+    }
+}
+
+@media (min-width: 900px) {
+    .descriptions-table {
+        width: 90%;
+    }
+}
+
+@media (min-width: 1300px) {
+    .descriptions-table {
+        width: 70%;
     }
 }

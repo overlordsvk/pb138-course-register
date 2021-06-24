@@ -25,6 +25,7 @@ function Profile() {
         );
 
     if (error || !data) {
+        console.log(error);
         return <ServerError />;
     }
 
