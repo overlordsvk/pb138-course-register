@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button, Skeleton, Table } from "antd";
+import { Button, Skeleton, Table, Tag } from "antd";
 import { gql, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
 import NotFound from "../status/NotFound";
 import { useRecoilValue } from "recoil";
 import { refetchTrigger } from "../state/atoms";
 import { isTeacher } from "../utils/helpers";
+import dayjs from "dayjs";
 
 interface allCourses {
     code: string;
@@ -14,6 +15,8 @@ interface allCourses {
     detail: string;
     id: number;
     capacity: number;
+    enrolment_start: Date;
+    enrolment_end: Date;
     enrolments_aggregate: {
         aggregate: {
             count: number;
@@ -33,6 +36,8 @@ const TheCourses = gql`
             name
             capacity
             detail
+            enrolment_start
+            enrolment_end
             enrolments_aggregate(where: { user: { role: { _eq: student } } }) {
                 aggregate {
                     count
@@ -72,7 +77,10 @@ export function Courses() {
             code: course.code,
             name: course.name,
             detail: course.detail,
-            capacity: `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
+            capacity: course.capacity,
+            enrolment_start: course.enrolment_start,
+            enrolment_end: course.enrolment_end,
+            enrolments_aggregate: course.enrolments_aggregate,
             key: course.id,
         };
     });
@@ -89,6 +97,38 @@ export function Courses() {
             key: "name",
         },
         {
+            title: "Enrolled",
+            dataIndex: "capacity",
+            key: "capacity",
+            width: 20,
+            render: (_: any, course: allCourses) =>
+                `${course.enrolments_aggregate.aggregate.count} / ${course.capacity}`,
+        },
+        {
+            title: "Registration",
+            key: "registration",
+            width: 20,
+            render: (_: any, item: allCourses) => (
+                <Tag
+                    color={
+                        isRegistrationEnabled(
+                            item.enrolment_start,
+                            item.enrolment_end
+                        )
+                            ? "green"
+                            : "volcano"
+                    }
+                >
+                    {isRegistrationEnabled(
+                        item.enrolment_start,
+                        item.enrolment_end
+                    )
+                        ? "Active"
+                        : "Disabled"}
+                </Tag>
+            ),
+        },
+        {
             title: "",
             dataIndex: "id",
             key: "id",
@@ -102,16 +142,10 @@ export function Courses() {
                 );
             },
         },
-        {
-            title: "Enrolled",
-            dataIndex: "capacity",
-            key: "capacity",
-            width: 20,
-        },
     ];
 
-    if (!Teacher) {
-        columns.splice(2, 1);
+    function isRegistrationEnabled(start: Date, end: Date) {
+        return dayjs(start) < dayjs() && dayjs() < dayjs(end);
     }
 
     return (

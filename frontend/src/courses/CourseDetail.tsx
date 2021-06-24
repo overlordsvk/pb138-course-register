@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import {
     Alert,
+    Descriptions,
     message,
     Popconfirm,
     Progress,
     Skeleton,
-    Space,
     Spin,
     Tooltip,
 } from "antd";
@@ -32,6 +32,7 @@ import { isTeacher } from "../utils/helpers";
 
 function CourseDetail() {
     let { id } = useParams<{ id: string }>();
+    const size = useWindowSize();
 
     const [showLoading, setShowLoading] = useState(false);
     const [done, setDone] = useState(false);
@@ -72,7 +73,9 @@ function CourseDetail() {
     if (data?.course.length == 0 || data?.course[0] == undefined)
         return <NotFound />;
     const course = data?.course[0];
-    const enrolledStudents = course.enrolments.filter((enrolment) => {return enrolment.user.role == "student";}).length!;
+    const enrolledStudents = course.enrolments.filter((enrolment) => {
+        return enrolment.user.role == "student";
+    }).length!;
     const isFull = enrolledStudents >= course.capacity;
     const isAlreadyEnrolled =
         course.enrolments.find((e) => e.user_id == appUser.id) != undefined;
@@ -80,6 +83,31 @@ function CourseDetail() {
         dayjs(course.enrolment_start) < dayjs() &&
         dayjs() < dayjs(course.enrolment_end);
 
+    function useWindowSize() {
+        // Initialize state with undefined width/height so server and client renders match
+        // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
+        const [windowSize, setWindowSize] = useState({
+            width: undefined as undefined | number,
+            height: undefined as undefined | number,
+        });
+        useEffect(() => {
+            // Handler to call on window resize
+            function handleResize() {
+                // Set window width/height to state
+                setWindowSize({
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                });
+            }
+            // Add event listener
+            window.addEventListener("resize", handleResize);
+            // Call handler right away so state gets updated with initial window size
+            handleResize();
+            // Remove event listener on cleanup
+            return () => window.removeEventListener("resize", handleResize);
+        }, []); // Empty array ensures that effect is only run on mount
+        return windowSize;
+    }
     async function enroll() {
         setShowLoading(true);
 
@@ -111,70 +139,70 @@ function CourseDetail() {
             spinning={showLoading}
             indicator={<LoadingOutlined style={{ fontSize: 80 }} spin />}
         >
-            
-            <Space direction="vertical">
-                <div>
-                    <h1>{`${course.code}: ${course.name}`}</h1>
-                    <h3>
-                        {course.semester.term} {course.semester.year}
-                    </h3>
-                </div>
-                <div>
-                    <h3>Teacher:</h3>
-                    <p>{course.teacher.name}</p>
-                </div>
-                <div>
-                    <h3>Description:</h3>
-                    <p>{course.detail}</p>
-                </div>
-                <div>
-                    <h3>Number of registrations:</h3>
-                    <span>{`${enrolledStudents}/${course.capacity}`}</span>
-                    {enrolledStudents >= course.capacity ? (
-                        <Progress
-                            className="progressbar"
-                            percent={(enrolledStudents / course.capacity) * 100}
-                            showInfo={false}
-                            status="exception"
-                        />
-                    ) : (
-                        <Progress
-                            className="progressbar"
-                            percent={(enrolledStudents / course.capacity) * 100}
-                            showInfo={false}
-                        />
-                    )}
-                </div>
-                <div>
-                    <h3>Registration time start:</h3>
-                    <p>
-                        {dayjs(course.enrolment_start).format("D.M.YYYY HH:mm")}
-                    </p>
-                </div>
-                <div>
-                    <h3>Registration time end:</h3>
-                    <p>
-                        {dayjs(course.enrolment_end).format("D.M.YYYY HH:mm")}
-                    </p>
-                </div>
-
-                {isAlreadyEnrolled && !teacher && (
-                    <Alert
-                        message="You are enroled in this course!"
-                        type="info"
+            <h1>{`${course.code}: ${course.name}`}</h1>
+            {isAlreadyEnrolled && !teacher && (
+                <Alert
+                    className="descriptions-table"
+                    message="You are enroled in this course"
+                    type="info"
+                />
+            )}
+            {!isRegistrationEnabled && (
+                <Alert
+                    className="descriptions-table"
+                    message="Registration is not awailable now!"
+                    type="warning"
+                />
+            )}
+            <Descriptions
+                className="descriptions-table"
+                bordered
+                layout={
+                    size.width && size.width < 700 ? "vertical" : "horizontal"
+                }
+                column={{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 0 }}
+            >
+                <Descriptions.Item label="Semester">
+                    {course.semester.term} {course.semester.year}
+                </Descriptions.Item>
+                <Descriptions.Item label="Teacher">
+                    {course.teacher.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Description">
+                    {course.detail}
+                </Descriptions.Item>
+                <Descriptions.Item label="Number of registrations">
+                    <span className="registrations">{`${enrolledStudents}/${course.capacity}`}</span>
+                    <Progress
+                        className="progressbar"
+                        percent={(enrolledStudents / course.capacity) * 100}
+                        showInfo={false}
+                        status={
+                            enrolledStudents >= course.capacity
+                                ? "exception"
+                                : "normal"
+                        }
                     />
-                )}
-
+                </Descriptions.Item>
+                <Descriptions.Item label="Registration begin">
+                    {dayjs(course.enrolment_start).format("D.M.YYYY HH:mm")}
+                </Descriptions.Item>
+                <Descriptions.Item label="Registration end">
+                    {dayjs(course.enrolment_end).format("D.M.YYYY HH:mm")}
+                </Descriptions.Item>
+            </Descriptions>
+            <div style={{ marginTop: "1em" }}>
                 {teacher ? (
-                    appUser.id == course.teacher.auth0_id ? (
-                        
+                    appUser.id == course.teacher.auth0_id && (
                         <Link to={path}>
-                            <Button style={{ marginBottom: "1em" }} type="primary">
+                            <Button
+                                style={{ marginBottom: "1em" }}
+                                type="primary"
+                            >
                                 edit
                             </Button>
                         </Link>
-                    ) :
-                        <></>
+                    )
                 ) : !isAlreadyEnrolled ? (
                     <Popconfirm
                         disabled={!isRegistrationEnabled || isFull}
@@ -189,8 +217,8 @@ function CourseDetail() {
                                 !isRegistrationEnabled
                                     ? "Registration is not available now!"
                                     : isFull
-                                        ? "Course is full"
-                                        : ""
+                                    ? "Course is full"
+                                    : ""
                             }
                         >
                             <Button
@@ -226,7 +254,7 @@ function CourseDetail() {
                         </Tooltip>
                     </Popconfirm>
                 )}
-            </Space>
+            </div>
         </Spin>
     );
 }
