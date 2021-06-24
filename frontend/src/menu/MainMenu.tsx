@@ -16,7 +16,7 @@ import "./MainMenu.css";
 
 function MainMenu() {
     const { isAuthenticated } = useAuth0();
-    var menu = <></>;
+    let menu = <></>;
     if (isAuthenticated) {
         menu = (
             <>

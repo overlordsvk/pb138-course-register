@@ -73,3 +73,7 @@
 .footer {
     text-align: center;
 }
+
+.ant-descriptions-item-label {
+    font-weight: 700;
+}
