@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button, Skeleton, Table, Tag } from "antd";
 import { gql, useQuery } from "@apollo/client";
 import ServerError from "../status/ServerError";
-import NotFound from "../status/NotFound";
 import { useRecoilValue } from "recoil";
 import { refetchTrigger } from "../state/atoms";
 import { isTeacher } from "../utils/helpers";
@@ -68,10 +67,7 @@ export function Courses() {
 
     if (error) return <ServerError />;
 
-    if (data?.course.length == 0 || data?.course[0] == undefined)
-        return <NotFound />;
-
-    const Courses = data.course.map((course: allCourses) => {
+    const Courses = data?.course.map((course: allCourses) => {
         return {
             id: course.id,
             code: course.code,

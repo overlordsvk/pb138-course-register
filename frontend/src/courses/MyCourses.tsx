@@ -47,10 +47,7 @@ function MyCourses() {
         );
     if (error) return <ServerError />;
 
-    if (data?.enrolment.length == 0 || data?.enrolment[0] == undefined)
-        return <h1> No courses found </h1>;
-
-    const dataSource = data.enrolment.map((enrolment: myCourse) => {
+    const dataSource = data?.enrolment.map((enrolment: myCourse) => {
         return {
             id: enrolment.course.id,
             code: enrolment.course.code,
