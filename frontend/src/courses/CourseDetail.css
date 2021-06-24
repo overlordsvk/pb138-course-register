@@ -12,20 +12,16 @@
     }
 }
 
-@media (min-width: 1000px) {
-    .detail-skeleton {
-        width: 50%;
-    }
-}
-
 @media (min-width: 900px) {
-    .descriptions-table {
+    .descriptions-table,
+    .detail-skeleton {
         width: 90%;
     }
 }
 
 @media (min-width: 1300px) {
-    .descriptions-table {
+    .descriptions-table,
+    .detail-skeleton {
         width: 70%;
     }
 }
