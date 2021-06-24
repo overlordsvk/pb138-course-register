@@ -82,7 +82,6 @@ function CreateCourse() {
                 teacher_id: appUser.id,
             },
         });
-        console.log(courseId);
         await createEnrollment({
             variables: {
                 id: courseId.data.insert_course_one.id,

@@ -132,8 +132,6 @@ function CourseDetail() {
         setDone(true);
     }
 
-    console.log(course.teacher.auth0_id);
-    console.log(appUser.id);
     return (
         <Spin
             spinning={showLoading}
