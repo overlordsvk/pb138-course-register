@@ -11,14 +11,13 @@
 <a href="https://auth0.com/" title="Auth0"><img src="https://github.com/get-icon/geticon/raw/master/icons/auth0.svg" alt="Auth0" width="30px" height="30px"></a>
 <a href="https://hasura.io/" title="Hasura"><img src="https://github.com/get-icon/geticon/raw/master/icons/hasura.svg" alt="Hasura" width="30px" height="30px"></a>
 
-# PB138 Course registration project
-**Authors (name, UČO):**
-  - Márius Molčány, 456350  
-  - Peter Baltazarovič, 456213 
-  - Michal Cikatricis, 485669
-  - Martin Gargalovič, 485612
+# Course registration project
 
-**Technologies:**
+## Live Demo
+[https://pb138-course-register-v1.vercel.app/](https://pb138-course-register-v1.vercel.app/)
+  - default role as student
+
+## Technologies
   - React (Typescript)
   - Apollo Client
   - Recoil
@@ -30,10 +29,22 @@
   - CSS3
   - Ant.design (React UI)
 
-**Project deployment:**
+## Project deployment
   1. import ```/configs/hasura_schema.sql``` to DB 
   2. import ```/configs/hasura_metadata.json``` to Hasura
   3. add authentication rule to Auth0  ```/configs/auth0/hasura-jwt-claim.js```
   4. add authentication rule to Auth0  ```/configs/auth0/hasura-user-sync.js```
   5. replace config strings in ```/frontend/src/utils/constants.ts```with yours
   6. in ```/frontend``` run ```npm start```
+
+## Authors (name, UČO)
+  - Márius Molčány, 456350  
+  - Peter Baltazarovič, 456213 
+  - Michal Cikatricis, 485669
+  - Martin Gargalovič, 485612
+
+Developed as project for MUNI FI: PB138 Modern markup languages
+
+## License
+[MIT][license] © Authors
+
