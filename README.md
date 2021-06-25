@@ -46,5 +46,5 @@
 Developed as project for MUNI FI: PB138 Modern markup languages
 
 ## License
-[MIT][license] © Authors
+[MIT](https://github.com/overlordsvk/pb138-course-register/blob/main/LICENSE-MIT) © 2021 Márius Molčány, Peter Baltazarovič, Michal Cikatricis, Martin Gargalovič
 
