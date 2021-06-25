@@ -33,7 +33,7 @@
     "react/jsx-indent": ["warn", 4],
     "@typescript-eslint/indent": ["warn", 4],
     "quotes": ["warn", "double"],
-    "linebreak-style": ["warn", "windows"],
+    "linebreak-style": 0,
     "jsx-quotes": [2, "prefer-double"],
     "@typescript-eslint/quotes":["warn", "double"],
     "semi": [2, "always"]
